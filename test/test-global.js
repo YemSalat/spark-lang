@@ -1,5 +1,12 @@
 'use strict';
+// :: SETUP
+var getSyntaxTree = window.SPARK_test.getSyntaxTree;
+var getAbstractTree = window.SPARK_test.getAbstractTree;
+var getCode = window.SPARK_test.getCode;
+var getFirstChild = window.SPARK_test.getFirstChild;
 
+
+// ::TEST
 QUnit.module('Simple Compare Trees', function () {
 
 	QUnit.test( 'Test assignment declaration', function( assert ) {

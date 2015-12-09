@@ -1,66 +1,53 @@
-var gulp = require('gulp');
-var sourcemaps = require('gulp-sourcemaps');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var PEG = require("pegjs");
 var fs = require('fs');
-var minify = require('uglify-js').minify;
+var PEG = require("pegjs");
+var browserify = require('browserify');
+
+var gulp = require('gulp');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var gutil = require('gulp-util');
+var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
 
 
-gulp.task('evaluator', function() {
-    gulp.src([
-            'src/module.js',
-            'src/evaluator/modules/*.js',
-            'src/evaluator/evaluator.js',
-        ])
-        .pipe(sourcemaps.init())
-            .pipe(concat('evaluator.js'))
-            .pipe(uglify())
-        .pipe(sourcemaps.write('/maps'))
-        .pipe(gulp.dest('build/'));
-    console.log('Evaluator saved');
+'use strict';
+
+
+gulp.task('evaluator', function () {
+  // set up the browserify instance on a task basis
+  var b = browserify({
+    entries: './src/evaluator/evaluator.js',
+    debug: true
+  });
+
+  return b.bundle()
+    .pipe(source('evaluator.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+        .pipe(uglify())
+        .on('error', gutil.log)
+    .pipe(sourcemaps.write('./maps/'))
+    .pipe(gulp.dest('./build/'));
 });
 
-gulp.task('evaluator_nomin', function() {
-    gulp.src([
-            'src/module.js',
-            'src/evaluator/modules/*.js',
-            'src/evaluator/evaluator.js',
-        ])
-        .pipe(sourcemaps.init())
-            .pipe(concat('evaluator.js'))
-        .pipe(sourcemaps.write('/maps'))
-        .pipe(gulp.dest('build/'));
-    console.log('Evaluator saved');
-});
+gulp.task('generator', function () {
+  // set up the browserify instance on a task basis
+  var b = browserify({
+    entries: './src/generator/generator.js',
+    debug: true
+  });
 
-gulp.task('generator', function() {
-    gulp.src([
-            'src/module.js',
-            'src/generator/modules/*.js',
-            'src/generator/generator.js',
-        ])
-        .pipe(sourcemaps.init())
-            .pipe(concat('generator.js'))
-            .pipe(uglify())
-        .pipe(sourcemaps.write('/maps'))
-        .pipe(gulp.dest('build/'));
-    console.log('Generator saved');
+  return b.bundle()
+    .pipe(source('generator.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+        .pipe(uglify())
+        .on('error', gutil.log)
+    .pipe(sourcemaps.write('./maps/'))
+    .pipe(gulp.dest('./build/'));
 });
-
-gulp.task('generator_nomin', function() {
-    gulp.src([
-            'src/module.js',
-            'src/generator/modules/*.js',
-            'src/generator/generator.js',
-        ])
-        .pipe(sourcemaps.init())
-            .pipe(concat('generator.js'))
-        .pipe(sourcemaps.write('/maps'))
-        .pipe(gulp.dest('build/'));
-    console.log('Generator saved');
-});
-
 
 gulp.task('parser', function() {
 

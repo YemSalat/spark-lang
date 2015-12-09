@@ -1,8 +1,4 @@
-(function (module) {
-  var moduleName = 'SymbolTable';
-  if (module.checkModule(moduleName)) {
-    return;
-  }
+(function (exports) {
   // :: SYMBOL TABLE
   'use strict';
 
@@ -89,6 +85,6 @@
   }
 
   // :: EXPORT
-  module.exportModule(moduleName, api);
-
-})(this);
+  exports.SymbolTable = api;
+  
+})(exports || this);

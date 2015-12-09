@@ -1,8 +1,4 @@
-(function (module) {
-  var moduleName = 'GeneratorUtil';
-  if (module.checkModule(moduleName)) {
-    return;
-  }
+(function (exports) {
   // :: UTIL
   'use strict';
 
@@ -18,13 +14,13 @@
     'void'  : 'void',
   };
 
-  var util = {
+  var api = {
     generateType: function (type) {
       return typeMap[type] || type;
     }
   };
 
   // :: EXPORT
-  module.exportModule(moduleName, util);
+  module.exports.GeneratorUtil = api;
 
-})(this);
+})(exports || this);

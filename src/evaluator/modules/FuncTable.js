@@ -1,8 +1,4 @@
-(function (module) {
-  var moduleName = 'FuncTable';
-  if (module.checkModule(moduleName)) {
-    return;
-  }
+(function (exports) {
   // :: FUNCTION TABLE
   'use strict';
 
@@ -88,6 +84,6 @@
     }
   }
   // :: EXPORT
-  module.exportModule(moduleName, api);
+  exports.FuncTable = api;
 
-})(this);
+})(exports || this);

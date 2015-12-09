@@ -6,21 +6,23 @@ var theGenerator = window.theGenerator;
 
 var evaluatorUtil = window.SPARK_modules.EvaluatorUtil;
 
-var getSyntaxTree = function (source) {
+var testUtil = window.SPARK_test = {};
+
+testUtil.getSyntaxTree = function (source) {
 	var result = theParser.parse(source);
 	return result;
 };
 
-var getAbstractTree = function (source, tree) {
+testUtil.getAbstractTree = function (source, tree) {
 	var result = theEvaluator.parse(tree || getSyntaxTree(source));
 	return result;
 };
 
-var getCode = function (source, tree) {
+testUtil.getCode = function (source, tree) {
 	var code = theGenerator.parse(getAbstractTree(source, tree));
 	return code;
 };
 
-var getFirstChild = function (tree) {
+testUtil.getFirstChild = function (tree) {
 	return tree.body[0];
 };

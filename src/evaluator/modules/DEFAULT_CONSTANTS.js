@@ -1,8 +1,4 @@
-(function (module) {
-  var moduleName = 'DEFAULT_CONSTANTS';
-  if (module.checkModule(moduleName)) {
-    return;
-  }
+(function (exports) {
   // :: CONSTANTS
   'use strict';
   
@@ -29,6 +25,6 @@
     }
   };
 
-  // :: EXPORT
-  module.exportModule(moduleName, DEFAULT_CONSTANTS);
-})(this);
+  exports.DEFAULT_CONSTANTS = DEFAULT_CONSTANTS;
+
+})(exports || this);

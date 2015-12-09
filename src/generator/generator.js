@@ -2,8 +2,8 @@ var theGenerator = (function(module) {
   'use strict';
 
   // :: MODULES
-  var indentManager = module.importModule('IndentManager');
-  var util = module.importModule('GeneratorUtil');
+  var indentManager = require('./modules/IndentManager');
+  var util = require('./modules/GeneratorUtil');
 
   // :: OP
   var __generateNode = function(node, method) {

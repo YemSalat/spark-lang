@@ -1,8 +1,4 @@
-(function (module) {
-  var moduleName = 'ErrorManager';
-  if (module.checkModule(moduleName)) {
-    return;
-  }
+(function (exports) {
   // :: ERROR MANAGER
   'use strict';
 
@@ -60,13 +56,6 @@
                             }
   };
 
-  // error class
-  function CompilerError (name, message, location) {
-    this.name = name;
-    this.message = message;
-    this.location = location;
-  }
-
   // log error
   var logError = function(node, location, errorType, params) {
     var errorCategory = (typeof node === 'string') ? node : node['$$'];
@@ -107,6 +96,6 @@
 
 
   // :: EXPORT
-  module.exportModule(moduleName, api);
+  exports.ErrorManager = api;
 
-})(this);
+})(exports || this);

@@ -1,3 +1,11 @@
+'use strict';
+// :: SETUP
+var getSyntaxTree = window.SPARK_test.getSyntaxTree;
+var getAbstractTree = window.SPARK_test.getAbstractTree;
+var getCode = window.SPARK_test.getCode;
+var getFirstChild = window.SPARK_test.getFirstChild;
+
+// :: TEST
 QUnit.module('Code Generator Output', function () {
 
 	QUnit.test( 'Output assignment declaration', function( assert ) {

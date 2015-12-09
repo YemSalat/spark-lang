@@ -1,8 +1,4 @@
-(function (module) {
-  var moduleName = 'IndentManager';
-  if (module.checkModule(moduleName)) {
-    return;
-  }
+(function (exports) {
   // :: INDENT MANAGER
   'use strict';
 
@@ -25,6 +21,6 @@
   }
 
   // :: EXPORT
-  module.exportModule(moduleName, api);
+  module.exports.IndentManager = api;
 
 })(this);

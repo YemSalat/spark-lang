@@ -1,21 +1,28 @@
-var theEvaluator = (function(module) {
+(function(exports) {
   'use strict';
 
   // :: CONSTANTS
-  var DEFAULT_CONSTANTS = module.importModule('DEFAULT_CONSTANTS');
+  var DEFAULT_CONSTANTS = require('./modules/DEFAULT_CONSTANTS');
+
+  // :: ERRORS
+  function SemanticError (name, message, location) {
+    this.name = name;
+    this.message = message;
+    this.location = location;
+  }
 
   // :: MODULES
-  var symbolTable = module.importModule('SymbolTable');
-  var funcTable = module.importModule('FuncTable');
-  var errorManager = module.importModule('ErrorManager');
-  var util = module.importModule('EvaluatorUtil');
+  var symbolTable = require('./modules/SymbolTable');
+  var funcTable = require('./modules/FuncTable');
+  var errorManager = require('./modules/ErrorManager');
+  var util = require('./modules/EvaluatorUtil');
 
   // :: OP
   var __evalNode = function(node, method) {
     var mType = method || node['$$'];
     var pNode = evaluate[mType](node)
     if (pNode.error) {
-      throw new CompilerError('SemanticError', pNode.error.message, pNode.error.location);
+      throw new SemanticError('SemanticError', pNode.error.message, pNode.error.location);
     }
     return pNode;
   };
@@ -298,6 +305,6 @@ var theEvaluator = (function(module) {
   };
 
   // :: SPARK EVALUATOR
-  return api;
+  window.theEvaluator = api;
 
-})(this);
+})(exports || this);
