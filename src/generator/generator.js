@@ -189,23 +189,15 @@ module.exports = (function() {
     },
 
     UPDATE_EXPRESSION: function (node) {
-      node.argument = __generateNode(node.argument);
-      if (!util.isNumber(node.argument.type)) {
-        // error
-        return __logError(node, node.location, 'not_a_number');
-      }
-      node.type = node.argument.type; 
-      return node;
+      var result = node.operator + '';
+      result += __generateNode(node.argument);
+      return result;
     },
 
     UNARY_EXPRESSION: function (node) {
-      node.argument = __generateNode(node.argument);
-      var cType = util.typeCheck(node.argument);
-      if (cType !== 'bool') {
-        // error
-        return __logError(node, node.location, 'not_a_bool');
-      }
-      return node;
+      var result = node.operator + '';
+      result += __generateNode(node.argument);
+      return result;
     }
 
   };
