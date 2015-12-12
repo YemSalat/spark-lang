@@ -9,14 +9,19 @@ The language compiler consists of 3 parts:
 ### Requirements
 You will need node v5+ and npm (comes with node) - https://nodejs.org/
 
-
 ### Installation
 - clone repo
 - cd to project directory `cd spark-lang`
 - run `npm install` to install dependencies
 
+
 ## Using the Sparc compiler
-From the project root directory run `bin/sparc [input file] [commands]` 
+From the project _bin_ directory run `sparc [input file] [commands]` 
+_inpput file_ - optional, file to read sparc code from
+If the input file is not specified - you can supply inline input string with _-i_ command
+Commands:
+__-i__ - process input, for example `sparc -i "a = 1; b = a + 3"`
+__-o__ - output file, where the program will be saved, for example `sparc hello.sprk -o hello.cpp`
 
 
 ## TODO:
