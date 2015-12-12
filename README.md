@@ -30,7 +30,7 @@ __-o__ - output file, where the program will be saved, for example `sparc hello.
 
 ## How to hack the language
 
-### Building browser version
+### Building the compiler
 - from project root run `gulp build_browser` to build all compiler modules
 - alternatively you can run `gulp parser`, `gulp evaluator` or `gulp generator` to build compiler modules separately
 - after you built all the compiler components - you can build the binary compiler with `gulp build_sparc`
