@@ -3,6 +3,7 @@ var fs = require('fs');
 var PEG = require("pegjs");
 var minify = require('uglify-js').minify;
 var browserify = require('browserify');
+var prependFile = require('prepend-file');
 
 
 var gulp = require('gulp');
@@ -11,46 +12,48 @@ var buffer = require('vinyl-buffer');
 var gutil = require('gulp-util');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
+var header = require('gulp-header');
 
 
 'use strict';
 
 
 gulp.task('evaluator', function () {
-  // set up the browserify instance on a task basis
-  var b = browserify({
-	entries: './src/evaluator/evaluator.js',
-	debug: true
-});
+	// set up the browserify instance on a task basis
+	var b = browserify({
+		entries: './src/evaluator/evaluator.js',
+		debug: true
+	});
 
-  return b.bundle()
-  .pipe(source('evaluator.js'))
-  .pipe(buffer())
-  .pipe(sourcemaps.init({loadMaps: true}))
+	return b.bundle()
+	.pipe(source('evaluator.js'))
+	.pipe(buffer())
+	.pipe(sourcemaps.init({loadMaps: true}))
 		// Add transformation tasks to the pipeline here.
 		.pipe(uglify())
 		.on('error', gutil.log)
-		.pipe(sourcemaps.write('./maps/'))
-		.pipe(gulp.dest('./build/'));
-	});
+	.pipe(sourcemaps.write('./maps/'))
+	.pipe(gulp.dest('./build/'));
+});
 
 gulp.task('generator', function () {
-  // set up the browserify instance on a task basis
-  var b = browserify({
-	entries: './src/generator/generator.js',
-	debug: true
-});
+	// set up the browserify instance on a task basis
+	var b = browserify({
+		entries: './src/generator/generator.js',
+		debug: true
+	});
 
-  return b.bundle()
-  .pipe(source('generator.js'))
-  .pipe(buffer())
-  .pipe(sourcemaps.init({loadMaps: true}))
+	return b.bundle()
+	.pipe(source('generator.js'))
+	.pipe(buffer())
+	.pipe(sourcemaps.init({loadMaps: true}))
 		// Add transformation tasks to the pipeline here.
 		.pipe(uglify())
 		.on('error', gutil.log)
-		.pipe(sourcemaps.write('./maps/'))
-		.pipe(gulp.dest('./build/'));
-	});
+	.pipe(sourcemaps.write('./maps/'))
+	.pipe(gulp.dest('./build/'));
+});
+
 
 gulp.task('parser', function() {
 
@@ -84,7 +87,32 @@ gulp.task('parser', function() {
 				});
 				console.log('Parser saved');
 			});
-		});   
+		});	 
+	});
+});
+
+gulp.task('build_sparc', function () {
+	// set up the browserify instance on a task basis
+	exec('browserify --bare ./src/sparc.js > ./bin/sparc', function(err, out, code) {
+		if (err instanceof Error) {
+			return console.log(err);
+		}
+		prependFile('bin/sparc', '#!/usr/bin/env node\n\n', function(err) {
+			if(err) {
+				return console.log(err);
+			}
+
+		})
+		
+		// exec('chmod +x ./bin/sparc', function(err, out, code) {
+		// 	if (err instanceof Error) {
+		// 		return console.log(err);
+		// 	}
+			
+		// 	console.log('Sparc made executable');
+		// });
+
+		console.log('Sparc saved');
 	});
 });
 
@@ -96,3 +124,7 @@ gulp.task('build_browser', ['parser', 'evaluator', 'generator'], function() {
 
 });
 
+
+gulp.task('build', ['build_browser', 'build_sparc'], function() {
+
+});
