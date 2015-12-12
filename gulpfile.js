@@ -92,7 +92,7 @@ gulp.task('default', ['evaluator', 'generator'], function() {
 
 });
 
-gulp.task('all', ['parser', 'evaluator', 'generator'], function() {
+gulp.task('build_browser', ['parser', 'evaluator', 'generator'], function() {
 
 });
 

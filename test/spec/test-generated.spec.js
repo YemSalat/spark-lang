@@ -96,34 +96,6 @@ describe('Test code generated from files', function() {
 
 	});
 
-	describe('Test code generation for /var-declarations-alt.sprk', function () {
-		var abstract, symbolScope, funcScope;
-		
-		beforeEach(function (done) {
-			loadCode( 'var-declarations-alt.sprk', function (code) {
-				abstract = getAbstract(code);
-				symbolScope = getSymbolScope(code, 1);
-				done();
-			});
-			
-		});
-
-		it('Checks number of variable declarations is correct', function() {
-
-			expect( Object.keys(symbolScope).length ).toEqual( 5 );
-		});
-
-		it('Checks variable types are correct', function() {
-
-			expect( symbolScope['a'].type ).toEqual( 'byte' );
-			expect( symbolScope['b'].type ).toEqual( 'int' );
-			expect( symbolScope['c'].type ).toEqual( 'long' );
-			expect( symbolScope['d'].type ).toEqual( 'long' );
-			expect( symbolScope['e'].type ).toEqual( 'str' );
-		});
-
-	});
-
 	describe('Compare output for /var-declarations.sprk and /var-declarations-alt.sprk', function () {
 		var files;
 		
