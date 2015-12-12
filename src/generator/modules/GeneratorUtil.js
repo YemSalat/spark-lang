@@ -1,4 +1,4 @@
-(function (exports) {
+module.exports = (function () {
   // :: UTIL
   'use strict';
 
@@ -21,6 +21,6 @@
   };
 
   // :: EXPORT
-  module.exports.GeneratorUtil = api;
+  return api;
 
-})(exports || this);
+})();

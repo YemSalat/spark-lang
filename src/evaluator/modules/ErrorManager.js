@@ -1,4 +1,4 @@
-(function (exports) {
+module.exports = (function () {
   // :: ERROR MANAGER
   'use strict';
 
@@ -96,6 +96,6 @@
 
 
   // :: EXPORT
-  exports.ErrorManager = api;
+  return api;
 
-})(exports || this);
+})();

@@ -1,4 +1,4 @@
-(function (exports) {
+module.exports = (function () {
   // :: INDENT MANAGER
   'use strict';
 
@@ -21,6 +21,6 @@
   }
 
   // :: EXPORT
-  module.exports.IndentManager = api;
+  return api;
 
-})(this);
+})();

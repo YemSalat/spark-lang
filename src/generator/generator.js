@@ -1,4 +1,4 @@
-var theGenerator = (function(module) {
+module.exports = (function() {
   'use strict';
 
   // :: MODULES
@@ -119,17 +119,12 @@ var theGenerator = (function(module) {
     },
 
     BINARY_EXPRESSION: function (node) {
+      var result = '';
       // eval left and right parts first
-      node.left = __generateNode(node.left);
-      node.right = __generateNode(node.right);
-      // assign node type
-      // check types
-      node.type = util.typeCheck(node.left, node.right);
-      // error
-      if (!node.type) {
-        return __logError(node, node.location, 'type_mismatch', [node.operator, node.left.type, node.right.type]);
-      }
-      return node;
+      result += __generateNode(node.left);
+      result += ' ' + node.operator + ' ';
+      result += __generateNode(node.right);
+      return result;
     },
 
     ASSIGNMENT_STATEMENT: function (node) {
@@ -215,16 +210,14 @@ var theGenerator = (function(module) {
 
   };
 
-  // :: SPARK EVALUATOR
+  // :: SPARK GENERATOR
 
   return {
     parse: function (tree) {
-      console.log('tree 2:')
-      console.log(tree)
 
       var code = __generateNode(tree);
       return code.trim();
     }
   };
 
-})(this);
+})();

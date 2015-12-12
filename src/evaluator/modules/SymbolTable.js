@@ -1,4 +1,4 @@
-(function (exports) {
+module.exports = (function () {
   // :: SYMBOL TABLE
   'use strict';
 
@@ -15,7 +15,7 @@
 
     setInitialScope: function (scope) {
       initialScope = scope;
-      reset();
+      api.reset();
     },
 
     getTable: function() {
@@ -85,6 +85,6 @@
   }
 
   // :: EXPORT
-  exports.SymbolTable = api;
+  return api;
   
-})(exports || this);
+})();

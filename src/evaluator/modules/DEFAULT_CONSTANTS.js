@@ -1,4 +1,4 @@
-(function (exports) {
+module.exports = (function () {
   // :: CONSTANTS
   'use strict';
   
@@ -25,6 +25,6 @@
     }
   };
 
-  exports.DEFAULT_CONSTANTS = DEFAULT_CONSTANTS;
+  return DEFAULT_CONSTANTS;
 
-})(exports || this);
+})();

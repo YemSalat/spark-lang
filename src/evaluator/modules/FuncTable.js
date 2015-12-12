@@ -1,4 +1,4 @@
-(function (exports) {
+module.exports = (function () {
   // :: FUNCTION TABLE
   'use strict';
 
@@ -84,6 +84,6 @@
     }
   }
   // :: EXPORT
-  exports.FuncTable = api;
+  return api;
 
-})(exports || this);
+})();

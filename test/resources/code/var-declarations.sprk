@@ -1,0 +1,7 @@
+byte a = 1
+int b = 3000
+long c = 700000
+
+long d = a + b + c
+
+str e = "Hello, World!"

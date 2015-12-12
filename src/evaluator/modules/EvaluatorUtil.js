@@ -1,4 +1,4 @@
-(function (exports) {
+module.exports = (function () {
   // :: UTILS
   'use strict';
   var numberTypeScale = ['byte', 'int', 'long', 'float'];
@@ -8,7 +8,7 @@
     'int': 32767,
     'long': 2147483647
   };
-
+  
   var api = {
     constructVarDeclarator: function (node) {
       node['$$'] = 'VARIABLE_STATEMENT';
@@ -96,6 +96,6 @@
     }
   };
   // :: EXPORT
-  exports.EvaluatorApi = api;
+  return api;
 
-})(exports || this);
+})();

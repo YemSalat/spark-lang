@@ -1,8 +1,16 @@
-(function(exports) {
+module.exports = (function() {
   'use strict';
 
+  // :: MODULES
+  var symbolTable = require('./modules/SymbolTable')
+  var funcTable = require('./modules/FuncTable');
+  var errorManager = require('./modules/ErrorManager');
+  var util = require('./modules/EvaluatorUtil');
+  
   // :: CONSTANTS
   var DEFAULT_CONSTANTS = require('./modules/DEFAULT_CONSTANTS');
+
+  symbolTable.setInitialScope(DEFAULT_CONSTANTS);
 
   // :: ERRORS
   function SemanticError (name, message, location) {
@@ -10,12 +18,6 @@
     this.message = message;
     this.location = location;
   }
-
-  // :: MODULES
-  var symbolTable = require('./modules/SymbolTable');
-  var funcTable = require('./modules/FuncTable');
-  var errorManager = require('./modules/ErrorManager');
-  var util = require('./modules/EvaluatorUtil');
 
   // :: OP
   var __evalNode = function(node, method) {
@@ -33,10 +35,13 @@
       symbolTable.reset(); 
       funcTable.reset();
 
-      var _nd = __evalNode(tree);
-      console.log(symbolTable.getTable());
+      var _tree = __evalNode(tree);
 
-      return _nd;
+      return {
+        tree: _tree,
+        symbolScope: symbolTable.getTable(),
+        funcScope: funcTable.getTable()
+      };
     }
   };
 
@@ -305,6 +310,6 @@
   };
 
   // :: SPARK EVALUATOR
-  window.theEvaluator = api;
+  return api;
 
-})(exports || this);
+})();
