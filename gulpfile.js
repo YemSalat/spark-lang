@@ -101,16 +101,14 @@ gulp.task('build_sparc', function () {
 			if(err) {
 				return console.log(err);
 			}
-
+			var result = minify('bin/sparc');
+			fs.writeFile('bin/sparc', result.code, function(err) {
+				if(err) {
+					return console.log(err);
+				}
+				console.log('Sparc bundled');
+			});
 		})
-		
-		// exec('chmod +x ./bin/sparc', function(err, out, code) {
-		// 	if (err instanceof Error) {
-		// 		return console.log(err);
-		// 	}
-			
-		// 	console.log('Sparc made executable');
-		// });
 
 		console.log('Sparc saved');
 	});
@@ -120,11 +118,7 @@ gulp.task('default', ['evaluator', 'generator'], function() {
 
 });
 
-gulp.task('build_browser', ['parser', 'evaluator', 'generator'], function() {
+gulp.task('build', ['parser', 'evaluator', 'generator'], function() {
 
 });
 
-
-gulp.task('build', ['build_browser', 'build_sparc'], function() {
-
-});
