@@ -29,30 +29,35 @@ __-o__ - output file, where the program will be saved, for example `sparc hello.
 
 ## Quick Language Spec
 Variable initialization - inferred types, (also - optional semicolons)
-`foo = 10 // int`
-`bar = "Hello" // str`
+    foo = 10 // int
+    bar = "Hello" // str
 
 
 Parenthesis in if and for statements are optional, but the curly brackets are mandatory.
-`if a < 5 { ... }`
+
+    if a < 5 { ... }
 
 
 Alias keywords for common operators - and, or, xor
-`if bar < 500 and foo > 100 { ... }`
+
+    if bar < 500 and foo > 100 { ... }
 
 
 There are alias for equality operators - `is` and `is not` (convert to - '==' and '!='
-`if reading is not 0 { ... }`
-`if ledPin is HIGH { ... }`
+
+    if reading is not 0 { ... }
+    if ledPin is HIGH { ... }
 
 
 Loops - there are only for loops in the language.
 They can take just the testing condition:
-`for i < 10 { ... }`
+
+    for i < 10 { ... }
 
 
 Otherwise they work the same way as regular for loops:
-`for i = 0; i < 10; i++ { ... }`
+
+    for i = 0; i < 10; i++ { ... }
 
 
 You can use `break` and `continue` statement,
@@ -60,14 +65,16 @@ there is also an alias for `continue` - `skip`
 
 
 Functions can have docstrings:
-`/// This is the function description`
-`int readPin ( int number ) { ... }`
+
+    /// This is the function description
+    int readPin ( int number ) { ... }
 
 
 There are aliases for the built in functions:
-`println() - Serial.println()`
-`pinRead() - digitalRead()`
-`now()     - millis()`
+
+    println() - Serial.println()
+    pinRead() - digitalRead()
+    now()     - millis()
 
 
 ## How to hack the language
