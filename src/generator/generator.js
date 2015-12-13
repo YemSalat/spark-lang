@@ -29,12 +29,12 @@ module.exports = (function() {
         var item = node.declarations[i];
         
         var varPostfix = '';
+        if (item.type === 'str') {
+          varPostfix = '[]';
+        }
         result += __generateNode(item.id) + varPostfix;
 
         if (item.init) {
-          if (item.init.type === 'str') {
-            varPostfix = '[]';
-          }
 
           result += ' = ' + __generateNode(item.init);
         }
@@ -181,10 +181,7 @@ module.exports = (function() {
     },
 
     LOGICAL_EXPRESSION: function (node) {
-      node.left = __generateNode(node.left);
-      node.right = __generateNode(node.right);
-
-      var result = node.left + ' ' + node.operator + ' ' + node.right;
+      var result = __generateNode(node.left) + ' ' + node.operator + ' ' + __generateNode(node.right);
       return result;
     },
 
