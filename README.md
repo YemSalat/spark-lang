@@ -90,15 +90,15 @@ There are aliases for the built in functions:
 
 
 ## Project directory structure
-    **build** - *browser version of the compiler*
-    **src** - *project sources*
-    |__ **parser** - *parser source*
-    |__ **evaluator** - *evaluator source*
-    |__ **generator** - *generator source*
-    **test** - *test suites*
-    |__ **resources** - *additional resources for tests*
-    |__ |__ **code** - *code samples*
-    |__ **spec** - *test specifications*
+    [build] - browser version of the compiler
+    [src] - project sources
+    |__ [parser] - parser source
+    |__ [evaluator] - evaluator source
+    |__ [generator] - generator source
+    [test] - test suites
+    |__ [resources] - additional resources for tests
+    |__ |__ [code] - code samples
+    |__ [spec] - test specifications
 
 
 ###Many thanks to:
