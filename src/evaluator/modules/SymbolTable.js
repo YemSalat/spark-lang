@@ -2,7 +2,7 @@ module.exports = (function () {
   // :: SYMBOL TABLE
   'use strict';
 
-  var initialScope = {};
+  var initialScope = require('../../modules/DEFAULT_CONSTANTS');
 
   var scopePointer = 1;
   var table = {
@@ -46,7 +46,7 @@ module.exports = (function () {
     },
 
     getScope: function (num) {
-      var scNum = num || scopePointer;
+      var scNum = (typeof num !== 'udefined') ? num : scopePointer;
       return table['sc' + scNum];
     },
 

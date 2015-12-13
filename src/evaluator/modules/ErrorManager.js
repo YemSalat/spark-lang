@@ -68,8 +68,6 @@ module.exports = (function () {
         var paramRegexB = new RegExp('\\{[ ]*'+ i +'[ ]*\\}', 'gi');
         errorMessage = errorMessage.replace(paramRegexA, function (a, b) {
           var cMap = errorConvertMaps[b];
-          console.log('>woo>');
-          console.log(a, b);
           return cMap[params[i]];
         });
         errorMessage = errorMessage.replace(paramRegexB, params[i]);
@@ -83,8 +81,6 @@ module.exports = (function () {
         node: node
       }
     }
-    console.log(err.location);
-    console.log(err.message);
 
     return err;
   }

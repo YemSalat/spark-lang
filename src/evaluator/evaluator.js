@@ -8,9 +8,7 @@ module.exports = (function() {
   var util = require('./modules/EvaluatorUtil');
   
   // :: CONSTANTS
-  var DEFAULT_CONSTANTS = require('./modules/DEFAULT_CONSTANTS');
-
-  symbolTable.setInitialScope(DEFAULT_CONSTANTS);
+  var DEFAULT_CONSTANTS = require('./../modules/DEFAULT_CONSTANTS');
 
   // :: ERRORS
   function SemanticError (name, message, location) {
@@ -36,6 +34,9 @@ module.exports = (function() {
       funcTable.reset();
 
       var _tree = __evalNode(tree);
+      
+      console.log('symbolTable.getTable()');
+      console.log(symbolTable.getTable());
 
       return {
         tree: _tree,
