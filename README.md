@@ -10,7 +10,7 @@ The language compiler consists of 3 parts:
 You will need node v5+ and npm (comes with node) - https://nodejs.org/
 
 ### Installation
-- clone repo
+- clone repo `git clone https://github.com/YemSalat/spark-lang.git`
 - cd to project directory `cd spark-lang`
 - run `npm install` to install dependencies
 
