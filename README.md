@@ -2,10 +2,9 @@
 
 _Sparklang_ (aka Spark) is an open source programming language for Arduino
 The language compiler consists of 3 parts:
+
 1) Parser - generted by peg.js, which produces a parse tree for further analisys
-
 2) Evaluator - checks the semantics of the parse tree, produces AST
-
 3) Code Generator - produces C++ code based on the AST
 
 ### Requirements
