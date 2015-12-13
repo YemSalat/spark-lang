@@ -11,10 +11,6 @@ var fInput = argv['_'][0] || null;
 var fOutput = argv['o'] || null;
 var iSource = argv['i'] || null;
 
-
-console.log(argv);
-
-
 var logError = function (error) {
 	var result = 'Unknown error';
 	var loc = error.location.start;
