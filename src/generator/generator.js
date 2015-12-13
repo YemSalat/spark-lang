@@ -202,14 +202,15 @@ module.exports = (function() {
 
   };
 
-  // :: SPARK GENERATOR
-
-  return {
+  var api = {
     parse: function (tree) {
 
       var code = __generateNode(tree);
       return code.trim();
     }
   };
+  // :: SPARK GENERATOR
+  global.SparkGenerator = api;
+  return api;
 
-})();
+})(this);
