@@ -30,7 +30,7 @@ Commands:
 ## TODO:
 - Improve everything
 
-## Quick Language Spec
+## Quick Language Spec (to be improved)
 Variable initialization - inferred types, (also - optional semicolons)
     foo = 10 // int
     bar = "Hello" // str

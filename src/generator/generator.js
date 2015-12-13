@@ -85,9 +85,9 @@ module.exports = (function() {
     },
 
 
-
     FOR_STATEMENT: function (node) {
-      return node;
+      var result = 'for ()';
+      return result;
     },
 
     FOR_STATEMENT_DECLARATION: function (node) {
