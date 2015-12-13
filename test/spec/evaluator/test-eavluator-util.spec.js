@@ -26,5 +26,24 @@ describe('Test EvaluatorUtil', function() {
 			expect( ut.typeCheck({}, 'str') ).toEqual( false );
 			expect( ut.typeCheck(null , null) ).toEqual( false );
 		});
+
+		it( 'Checks isNumber() works correctly', function( ) {
+
+			expect( ut.isNumber('byte') ).toEqual( true );
+			expect( ut.isNumber('int') ).toEqual( true );
+			expect( ut.isNumber('float') ).toEqual( true );
+			expect( ut.isNumber('long') ).toEqual( true );
+			expect( ut.isNumber('str') ).toEqual( false );
+		});
+
+		it( 'Checks isEqualityOperator() works correctly', function( ) {
+
+			expect( ut.isEqualityOperator('==') ).toEqual( true );
+			expect( ut.isEqualityOperator('!=') ).toEqual( true );
+			expect( ut.isEqualityOperator('is') ).toEqual( true );
+			expect( ut.isEqualityOperator('is not') ).toEqual( true );
+			expect( ut.isEqualityOperator('<') ).toEqual( false );
+			expect( ut.isEqualityOperator('is is not') ).toEqual( false );
+		});
 	});
 });
