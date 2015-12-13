@@ -2,6 +2,7 @@
 
 _Sparklang_ (aka Spark) is an open source programming language for Arduino
 The language compiler consists of 3 parts:
+
 1) Parser - generted by peg.js, which produces a parse tree for further analisys
 2) Evaluator - checks the semantics of the parse tree, produces AST
 3) Code Generator - produces C++ code based on the AST
@@ -17,11 +18,13 @@ You will need node v5+ and npm (comes with node) - https://nodejs.org/
 
 ## Using the Sparc compiler
 From the project _bin_ directory run `sparc [input file] [commands]` 
-_inpput file_ - optional, file to read sparc code from
+_input file_ - optional, file to read sparc code from
+
 If the input file is not specified - you can supply inline input string with _-i_ command
+
 Commands:
-__-i__ - process input, for example `sparc -i "a = 1; b = a + 3"`
-__-o__ - output file, where the program will be saved, for example `sparc hello.sprk -o hello.cpp`
+- __-i__ - process input, for example `sparc -i "a = 1; b = a + 3"`
+- __-o__ - output file, where the program will be saved, for example `sparc hello.sprk -o hello.cpp`
 
 
 ## TODO:
@@ -90,20 +93,22 @@ There are aliases for the built in functions:
 
 
 ## Project directory structure
-**build** - *browser version of the compiler*
-**src** - *project sources*
-|__ **parser** - *parser source*
-|__ **evaluator** - *evaluator source*
-|__ **generator** - *generator source*
-**test** - *test suites*
-|__ **resources** - *additional resources for tests*
-|__ |__ **code** - *code samples*
-|__ **spec** - *test specifications*
+    [bin] - 'binary' version of the compiler
+    [build] - browser version of the compiler
+    [src] - project sources
+    |__ [parser] - parser source
+    |__ [evaluator] - evaluator source
+    |__ [generator] - generator source
+    [test] - test suites
+    |__ [resources] - additional resources for tests
+    |__ |__ [code] - code samples
+    |__ [spec] - test specifications
 
 
 ###Many thanks to:
 - PEGjs project for an awesome parser generator and grammar examples [1]
 - Philippe Sigaud for his pegged grammar tutorial and examples [2]
+
 [1] http://pegjs.org/
 [2] https://github.com/PhilippeSigaud/Pegged/wiki/Grammar-Examples
 
