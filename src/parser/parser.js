@@ -1,4 +1,4 @@
-var SparkParser = module.exports = (function() {
+global.SparkParser = module.exports = (function() {
   "use strict";
 
   /*

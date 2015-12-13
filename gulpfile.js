@@ -68,7 +68,7 @@ gulp.task('parser', function() {
 			output: 'source'
 		});
 		// append variable name
-		parserSource = 'var SparkParser = module.exports = ' + parserSource;
+		parserSource = 'global.SparkParser = module.exports = ' + parserSource;
 		// save file
 		fs.writeFile('src/parser/parser.js', parserSource, function(err) {
 			if(err) {

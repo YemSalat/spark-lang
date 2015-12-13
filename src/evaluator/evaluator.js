@@ -1,4 +1,4 @@
-module.exports = (function(global) {
+module.exports = (function() {
   'use strict';
 
   // :: MODULES
@@ -313,4 +313,4 @@ module.exports = (function(global) {
   global.SparkEvaluator = api;
   return api;
 
-})(this);
+})();
