@@ -35,9 +35,6 @@ module.exports = (function() {
 
       var _tree = __evalNode(tree);
       
-      console.log('symbolTable.getTable()');
-      console.log(symbolTable.getTable());
-
       return {
         tree: _tree,
         symbolScope: symbolTable.getTable(),

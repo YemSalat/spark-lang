@@ -1,70 +1,4 @@
-var fs = require('fs');
-
-var SparkParser = require('../../src/parser/parser.js');
-var SparkEvaluator = require('../../src/evaluator/evaluator.js');
-var SparkGenerator = require('../../src/generator/generator.js');
-
-var CODE_DIR = './resources/code/';
-
-var getSyntaxTree = function (source) {
-	if (typeof source !== 'string') {
-		console.log('Note: non-string supplied to parser');
-		return source;
-	}
-	var result = SparkParser.parse(source);
-	return result;
-};
-var getAbstract = function (source) {
-	var result = SparkEvaluator.parse(getSyntaxTree(source));
-	return result;
-};
-var getAbstractTree = function (source) {
-	var result = SparkEvaluator.parse(getSyntaxTree(source));
-	return result.tree;
-};
-var getSymbolScope = function (source, n) {
-	var result = SparkEvaluator.parse(getSyntaxTree(source));
-	result = (n) ? result.symbolScope['sc' + n] : result.symbolScope;
-	return result;
-};
-var getFuncScope = function (source) {
-	var result = SparkEvaluator.parse(getSyntaxTree(source));
-	return result.funcScope;
-};
-var getCode = function (source, tree) {
-	var code = SparkGenerator.parse(getAbstractTree(source, tree));
-	return code;
-};
-var getFirstChild = function (tree) {
-	return tree.body[0];
-};
-var loadCode = function (filename, callback) {
-	fs.readFile(CODE_DIR + filename, 'utf8', function (err, data) {
-		if (err) {
-			return console.log(err);
-		}
-
-		callback(data);
-	});
-};
-var loadCodeFiles = function (fileArray, callbackTop) {
-	var result = {};
-	var count = 0;
-	for (var i=0, l=fileArray.length; i<l; i++) {
-		(function (n, len) {
-			var fname = fileArray[n];
-			loadCode(fname, function (code) {
-				result[fname] = code;
-
-				count++;
-				if (count >= len) {
-					callbackTop(result);
-				}
-			});
-		})(i, l);
-	}
-};
-
+var util = require('../modules/TestUtil');
 
 describe('Test code generated from files', function() {
 
@@ -72,9 +6,9 @@ describe('Test code generated from files', function() {
 		var abstract, symbolScope, funcScope;
 		
 		beforeEach(function (done) {
-			loadCode( 'var-declarations.sprk', function (code) {
-				abstract = getAbstract(code);
-				symbolScope = getSymbolScope(code, 1);
+			util.loadCode( 'var-declarations.sprk', function (code) {
+				abstract = util.getAbstract(code);
+				symbolScope = util.getSymbolScope(code, 1);
 				done();
 			});
 			
@@ -100,7 +34,7 @@ describe('Test code generated from files', function() {
 		var files;
 		
 		beforeEach(function (done) {
-			loadCodeFiles([
+			util.loadCodeFiles([
 					'var-declarations.sprk',
 					'var-declarations-alt.sprk'
 				],
@@ -113,8 +47,8 @@ describe('Test code generated from files', function() {
 		});
 
 		it('Checks parse trees are identical', function() {
-			var scopeExplicit = getSymbolScope(files['var-declarations.sprk'], 1);
-			var scopeImplicit = getSymbolScope(files['var-declarations-alt.sprk'], 1);
+			var scopeExplicit = util.getSymbolScope(files['var-declarations.sprk'], 1);
+			var scopeImplicit = util.getSymbolScope(files['var-declarations-alt.sprk'], 1);
 
 			expect( scopeImplicit ).toEqual( scopeExplicit );
 		});

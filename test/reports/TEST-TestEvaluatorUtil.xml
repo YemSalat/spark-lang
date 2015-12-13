@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<testsuite name="Test EvaluatorUtil" errors="0" tests="0" failures="0" time="0" timestamp="2015-12-14T02:15:25">
+</testsuite>
+<testsuite name="Test EvaluatorUtil.Test assignment declaration" errors="0" tests="5" failures="0" time="0.008" timestamp="2015-12-14T02:15:25">
+  <testcase classname="Test EvaluatorUtil.Test assignment declaration" name="Checks integer types are converted correctly" time="0.004"></testcase>
+  <testcase classname="Test EvaluatorUtil.Test assignment declaration" name="Checks typeCheck() works correctly" time="0.001"></testcase>
+  <testcase classname="Test EvaluatorUtil.Test assignment declaration" name="Checks isNumber() works correctly" time="0"></testcase>
+  <testcase classname="Test EvaluatorUtil.Test assignment declaration" name="Checks isEqualityOperator() works correctly" time="0"></testcase>
+  <testcase classname="Test EvaluatorUtil.Test assignment declaration" name="Checks isEqualityOperator() works correctly" time="0.001"></testcase>
+</testsuite>
+</testsuites>

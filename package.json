@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cd test && ../node_modules/jasmine-node/bin/jasmine-node --verbose spec"
+    "test": "cd test && ../node_modules/jasmine-node/bin/jasmine-node --verbose --junitreport spec"
   },
   "bin": {
     "sparc": "bin/sparc.js"
