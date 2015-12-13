@@ -18,7 +18,7 @@ You will need node v5+ and npm (comes with node) - https://nodejs.org/
 
 ## Using the Sparc compiler
 From the project _bin_ directory run `sparc [input file] [commands]` 
-_inpput file_ - optional, file to read sparc code from
+_input file_ - optional, file to read sparc code from
 
 If the input file is not specified - you can supply inline input string with _-i_ command
 
