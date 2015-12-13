@@ -41,12 +41,12 @@ Parenthesis in if and for statements are optional, but the curly brackets are ma
     if a < 5 { ... }
 
 
-Alias keywords for common operators - and, or, xor
+Alias keywords for common operators - `and`, `or`, `xor`
 
     if bar < 500 and foo > 100 { ... }
 
 
-There are alias for equality operators - `is` and `is not` (convert to - '==' and '!='
+There are alias for equality operators - `is` and `is not` (convert to - '==' and '!=')
 
     if reading is not 0 { ... }
     if ledPin is HIGH { ... }
@@ -64,7 +64,7 @@ Otherwise they work the same way as regular for loops:
 
 
 You can use `break` and `continue` statement,
-there is also an alias for `continue` - `skip`
+there is also an alias for 'continue' - `skip`
 
 
 Functions can have docstrings:
@@ -73,7 +73,7 @@ Functions can have docstrings:
     int readPin ( int number ) { ... }
 
 
-There are aliases for the built in functions:
+Aliases for the built-in Arduino functions:
 
     println() - Serial.println()
     pinRead() - digitalRead()
