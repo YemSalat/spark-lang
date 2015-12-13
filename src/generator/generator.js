@@ -213,4 +213,4 @@ module.exports = (function() {
   global.SparkGenerator = api;
   return api;
 
-})(this);
+})();
