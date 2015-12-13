@@ -90,6 +90,7 @@ There are aliases for the built in functions:
 
 
 ## Project directory structure
+    [bin] - 'binary' version of the compiler
     [build] - browser version of the compiler
     [src] - project sources
     |__ [parser] - parser source
