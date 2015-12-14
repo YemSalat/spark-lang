@@ -2,6 +2,7 @@ module.exports = (function() {
   'use strict';
 
   // :: MODULES
+  var useWatcher = require('./modules/UseWatcher');
   var indentManager = require('./modules/IndentManager');
   var util = require('./modules/GeneratorUtil');
 
@@ -21,13 +22,24 @@ module.exports = (function() {
     return pNode;
   };
 
-  var __processOutput = function (code) {
+  var __preProcess = function (code) {
+    var result = '';
+    // @TODO: Refactor
+    if (useWatcher.isUsed('print') || useWatcher.isUsed('println')) {
+      result = 'Serial.begin( 9600 );\n\n';
+    }
+
+    result = result + code;
+
+    return result;
+  };
+
+  var __postProcess = function (code) {
     var result = code.trim().replace(/(?!^)[ ]+/igm, ' ');
     return result;
   };
 
   // :: VARS
-  var uses = [];
 
   // :: API
   var api = {
@@ -35,10 +47,11 @@ module.exports = (function() {
       var code;
       
       code = __generateNode(tree);
-      code = __processOutput(code);
+      code = __preProcess(code);
+      code = __postProcess(code);
 
       console.log('USED FUNCSTIONS:');
-      console.log(uses);
+      console.log(useWatcher.getUses());
 
       return code;
     }
@@ -116,11 +129,23 @@ module.exports = (function() {
       return result;
     },
     CALL_STATEMENT: function (node) {
-      var result = node.name;
-      if (DEFAULT_FUNCTIONS.hasOwnProperty(node.name)) {
-        result = DEFAULT_FUNCTIONS[node.name];
-        uses.push(result);
+      var fName = node.callee.name;
+      var result = fName;
+      if (DEFAULT_FUNCTIONS.hasOwnProperty(fName)) {
+        result = DEFAULT_FUNCTIONS[fName];
+        useWatcher.add(fName);
       }
+
+      result += '( ';
+      var args = [];
+      for (var i=0, l=node['arguments'].length; i<l; i++) {
+        var curArg = node['arguments'][i];
+        args.push(__generateNode(curArg));
+      }
+      result += args.join(', ');
+
+      result += ' )';
+
       return result;
     },
 
