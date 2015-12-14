@@ -305,11 +305,12 @@ module.exports = (function() {
 
     UNARY_EXPRESSION: function (node) {
       node.argument = __evalNode(node.argument);
-      var cType = util.typeCheck(node.argument.type);
-      if (cType !== 'bool') {
+      // check 'not' operator is a boolean
+      if (node.operator === '!' && node.argument.type !== 'bool') {
         // error
         return errorManager.logError(node, node.location, 'not_a_bool');
       }
+      node.type = node.argument.type;
       return node;
     }
 

@@ -41,6 +41,9 @@ module.exports = (function () {
 		getFirstChild: function (tree) {
 			return tree.body[0];
 		},
+		checkComparison: function (filename, callback) {
+			
+		},
 		loadCode: function (filename, callback) {
 			fs.readFile(CODE_DIR + filename, 'utf8', function (err, data) {
 				if (err) {

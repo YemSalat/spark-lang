@@ -31,17 +31,20 @@ module.exports = (function() {
       var decs = [];
       for (var i=0,l=node.declarations.length; i<l; i++) {
         var item = node.declarations[i];
+        var curDec = '';
         
         var varPostfix = '';
         if (item.type === 'str') {
           varPostfix = '[]';
         }
-        decs.push( __generateNode(item.id) + varPostfix );
+        curDec += __generateNode(item.id) + varPostfix;
 
         if (item.init) {
 
-          decs.push( ' = ' + __generateNode(item.init) );
+          curDec += ' = ' + __generateNode(item.init);
         }
+
+        decs.push( curDec );
       }
 
       result += decs.join(', ');
