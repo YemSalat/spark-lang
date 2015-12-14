@@ -237,6 +237,10 @@ module.exports = (function() {
       return node;
     },
 
+    ASSIGNMENT_ACTION: function (node) {
+      return node;
+    },
+
     BLOCK_STATEMENT: function (node) {
       // increase current scope
       symbolTable.enterScope();

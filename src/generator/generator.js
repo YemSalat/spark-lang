@@ -46,14 +46,12 @@ module.exports = (function() {
     parse: function (tree) {
       var code;
 
+      // reset uses watcher
       useWatcher.reset();
       
       code = __generateNode(tree);
       code = __preProcess(code);
       code = __postProcess(code);
-
-      console.log('USED FUNCSTIONS:');
-      console.log(useWatcher.getUses());
 
       return code;
     }
@@ -123,7 +121,7 @@ module.exports = (function() {
     },
     PARAM_DECLARATOR: function (node) {
 
-      var result = util.generateVarDecalaration(node);
+      var result = util.generateVarDeclaration(node);
       return result;
     },
     RETURN_STATEMENT: function (node) {
@@ -199,6 +197,13 @@ module.exports = (function() {
       var result = __generateNode(node.left);
       // eval asignment right hand side
       result += ' = ' + __generateNode(node.right);
+      return result;
+    },
+
+    ASSIGNMENT_ACTION: function (node) {
+      var result = __generateNode(node.left);
+      // eval asignment right hand side
+      result += ' '+ node.operator +' ' + __generateNode(node.right);
       return result;
     },
 
