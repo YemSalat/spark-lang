@@ -19,11 +19,21 @@ module.exports = (function() {
 
   // :: OP
   var __evalNode = function(node, method) {
-    var mType = method || node['$$'];
-    var pNode = evaluate[mType](node)
-    if (pNode.error) {
-      throw new SemanticError('SemanticError', pNode.error.message, pNode.error.location);
+    var mType = method ||
+                (node !== null) ? node['$$'] : null;
+
+    var pNode = null;
+    if (mType) {
+      pNode = evaluate[mType](node)
+      if (pNode.error) {
+        throw new SemanticError('SemanticError', pNode.error.message, pNode.error.location);
+      }
     }
+    else {
+      console.log('Node evaluation method is not defined for:');
+      console.log(node);
+    }
+
     return pNode;
   };
 
@@ -42,7 +52,6 @@ module.exports = (function() {
       };
     }
   };
-
 
   // :: EVALUATE
   var evaluate = {
@@ -147,13 +156,12 @@ module.exports = (function() {
       return node;
     },
 
-
-
     FOR_STATEMENT: function (node) {
-      return node;
-    },
+      node.init = __evalNode(node.init);
+      node.test = __evalNode(node.test);
+      node.update = __evalNode(node.update);
+      node.body = __evalNode(node.body);
 
-    FOR_STATEMENT_DECLARATION: function (node) {
       return node;
     },
     BREAK_STATEMENT: function (node) {

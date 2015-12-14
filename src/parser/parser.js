@@ -332,7 +332,7 @@ global.SparkParser = module.exports = (function() {
               return {
                 location: getLocation(),
                 $$:       "UPDATE_EXPRESSION",
-                op:       operator,
+                operator:       operator,
                 argument: argument,
                 prefix:   false
               };
@@ -348,7 +348,7 @@ global.SparkParser = module.exports = (function() {
 
               return {
                 location: getLocation(), $$:     type,
-                op:       operator,
+                operator:       operator,
                 argument: argument,
                 prefix:   true
               };
@@ -439,7 +439,7 @@ global.SparkParser = module.exports = (function() {
               return {
                 location: getLocation(),
                 $$:       "ASSIGNMENT_ACTION",
-                op:       operator,
+                operator:       operator,
                 left:     left,
                 right:    right,
                 type:     "bool"
@@ -587,16 +587,16 @@ global.SparkParser = module.exports = (function() {
               };
             },
         peg$c335 = function() {
-              return { location: getLocation(), $$: "CONTINUE", label: null };
+              return { location: getLocation(), $$: "CONTINUE_STATEMENT", label: null };
             },
         peg$c336 = function(label) {
-              return { location: getLocation(), $$: "CONTINUE", label: label };
+              return { location: getLocation(), $$: "CONTINUE_STATEMENT", label: label };
             },
         peg$c337 = function() {
-              return { location: getLocation(), $$: "BREAK", label: null };
+              return { location: getLocation(), $$: "BREAK_STATEMENT", label: null };
             },
         peg$c338 = function(label) {
-              return { location: getLocation(), $$: "BREAK", label: label };
+              return { location: getLocation(), $$: "BREAK_STATEMENT", label: label };
             },
         peg$c339 = function() {
               return { location: getLocation(), $$: "RETURN_STATEMENT", argument: null };
@@ -9519,7 +9519,10 @@ global.SparkParser = module.exports = (function() {
                   if (s7 !== peg$FAILED) {
                     s8 = peg$parse__();
                     if (s8 !== peg$FAILED) {
-                      s9 = peg$parseBlock();
+                      s9 = peg$parseIfStatement();
+                      if (s9 === peg$FAILED) {
+                        s9 = peg$parseBlock();
+                      }
                       if (s9 !== peg$FAILED) {
                         peg$savedPos = s0;
                         s1 = peg$c327(s3, s5, s9);

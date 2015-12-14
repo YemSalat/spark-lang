@@ -7,12 +7,23 @@ module.exports = (function() {
 
   // :: OP
   var __generateNode = function(node, method) {
+    if (node === null) {
+      return '';
+    }
     var mType = method || node['$$'];
     var pNode = evaluate[mType](node)
     if (pNode.error) {
       throw new CompilerError('SemanticError', pNode.error.message, pNode.error.location);
     }
     return pNode;
+  };
+
+  var __processOutput = function (code) {
+    var result = code;
+
+
+
+    return result;
   };
 
   // :: GENERATE
@@ -86,13 +97,14 @@ module.exports = (function() {
 
 
     FOR_STATEMENT: function (node) {
-      var result = 'for ()';
+      var result = 'for (';
+      result += __generateNode(node.init) + ' ; ';
+      result += __generateNode(node.test) + ' ; ';
+      result += __generateNode(node.update) + ' )';
+      result += __generateNode(node.body);
       return result;
     },
 
-    FOR_STATEMENT_DECLARATION: function (node) {
-      return node;
-    },
     BREAK_STATEMENT: function (node) {
       return node;
     },
@@ -154,7 +166,7 @@ module.exports = (function() {
       var result = '';
       node.body.forEach(function(item) {
         result += indentManager.getCurrentIndent() + __generateNode(item);
-        if (!result.match(/\}\n$/)) {
+        if (!result.match(/\}[\s]*$/)) {
           result += ';';
         }
         result += '\n';
@@ -165,16 +177,16 @@ module.exports = (function() {
 
     IF_STATEMENT: function (node) {
 
-      var result = ' if ( ';
+      var result = 'if ( ';
 
       result += __generateNode(node.test);
 
-      result += ' ) ';
+      result += ' )';
       
       result += __generateNode(node.consequent);
 
       if (node.alternate) {
-      result += ' else ';
+      result += 'else ';
         result += __generateNode(node.alternate);
       }
       return result;
@@ -186,8 +198,13 @@ module.exports = (function() {
     },
 
     UPDATE_EXPRESSION: function (node) {
-      var result = node.operator + '';
-      result += __generateNode(node.argument);
+      var result = '';
+      if (node.prefix) {
+        result += node.operator + __generateNode(node.argument);
+      }
+      else {
+        result += __generateNode(node.argument) + node.operator;
+      }
       return result;
     },
 

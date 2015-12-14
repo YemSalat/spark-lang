@@ -599,7 +599,7 @@ PostfixExpression
       return {
         location: getLocation(),
         $$:       "UPDATE_EXPRESSION",
-        op:       operator,
+        operator:       operator,
         argument: argument,
         prefix:   false
       };
@@ -619,7 +619,7 @@ UnaryExpression
 
       return {
         location: getLocation(), $$:     type,
-        op:       operator,
+        operator:       operator,
         argument: argument,
         prefix:   true
       };
@@ -781,7 +781,7 @@ AssignmentExpression
       return {
         location: getLocation(),
         $$:       "ASSIGNMENT_ACTION",
-        op:       operator,
+        operator:       operator,
         left:     left,
         right:    right,
         type:     "bool"
@@ -891,7 +891,7 @@ IfStatement
   = IfToken _nbws_ test:Expression __
     consequent:Block __
     ElseToken __
-    alternate:Block
+    alternate: (IfStatement / Block)
     {
       return {
         location: getLocation(),
@@ -999,18 +999,18 @@ IterationStatement
 
 ContinueStatement
   = ContinueToken EOS {
-      return { location: getLocation(), $$: "CONTINUE", label: null };
+      return { location: getLocation(), $$: "CONTINUE_STATEMENT", label: null };
     }
   / ContinueToken _ label:Identifier EOS {
-      return { location: getLocation(), $$: "CONTINUE", label: label };
+      return { location: getLocation(), $$: "CONTINUE_STATEMENT", label: label };
     }
 
 BreakStatement
   = BreakToken EOS {
-      return { location: getLocation(), $$: "BREAK", label: null };
+      return { location: getLocation(), $$: "BREAK_STATEMENT", label: null };
     }
   / BreakToken _ label:Identifier EOS {
-      return { location: getLocation(), $$: "BREAK", label: label };
+      return { location: getLocation(), $$: "BREAK_STATEMENT", label: label };
     }
 
 ReturnStatement
