@@ -18,14 +18,6 @@ module.exports = (function() {
     return pNode;
   };
 
-  var __processOutput = function (code) {
-    var result = code;
-
-
-
-    return result;
-  };
-
   // :: GENERATE
   var evaluate = {
 
