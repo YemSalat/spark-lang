@@ -45,6 +45,8 @@ module.exports = (function() {
   var api = {
     parse: function (tree) {
       var code;
+
+      useWatcher.reset();
       
       code = __generateNode(tree);
       code = __preProcess(code);
