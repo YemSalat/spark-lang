@@ -28,6 +28,7 @@ module.exports = (function() {
     VARIABLE_STATEMENT: function(node) {
       var result = util.generateType(node.type) + ' ';
 
+      var decs = [];
       for (var i=0,l=node.declarations.length; i<l; i++) {
         var item = node.declarations[i];
         
@@ -35,13 +36,15 @@ module.exports = (function() {
         if (item.type === 'str') {
           varPostfix = '[]';
         }
-        result += __generateNode(item.id) + varPostfix;
+        decs.push( __generateNode(item.id) + varPostfix );
 
         if (item.init) {
 
-          result += ' = ' + __generateNode(item.init);
+          decs.push( ' = ' + __generateNode(item.init) );
         }
       }
+
+      result += decs.join(', ');
 
       return result;
     },
@@ -75,7 +78,8 @@ module.exports = (function() {
       return result;
     },
     PARAM_DECLARATOR: function (node) {
-      var result = util.generateType(node.type) + ' ' + node.id.name;
+
+      var result = util.generateVarDecalaration(node);
       return result;
     },
     RETURN_STATEMENT: function (node) {

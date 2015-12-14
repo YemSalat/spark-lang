@@ -1,7 +1,5 @@
-var util = require('../../modules/TestUtil');
-var evaluatorUtil = require('../../../src/evaluator/modules/EvaluatorUtil.js');
-
-
+var util = require('../modules/TestUtil');
+var evaluatorUtil = require('../../src/evaluator/modules/EvaluatorUtil.js');
 
 describe('Test EvaluatorUtil', function() {
 	describe('Test assignment declaration', function() {
@@ -36,16 +34,6 @@ describe('Test EvaluatorUtil', function() {
 			expect( evaluatorUtil.isNumber('float') ).toEqual( true );
 			expect( evaluatorUtil.isNumber('long') ).toEqual( true );
 			expect( evaluatorUtil.isNumber('str') ).toEqual( false );
-		});
-
-		it( 'Checks isEqualityOperator() works correctly', function( ) {
-
-			expect( evaluatorUtil.isEqualityOperator('==') ).toEqual( true );
-			expect( evaluatorUtil.isEqualityOperator('!=') ).toEqual( true );
-			expect( evaluatorUtil.isEqualityOperator('is') ).toEqual( true );
-			expect( evaluatorUtil.isEqualityOperator('is not') ).toEqual( true );
-			expect( evaluatorUtil.isEqualityOperator('<') ).toEqual( false );
-			expect( evaluatorUtil.isEqualityOperator('is is not') ).toEqual( false );
 		});
 
 		it( 'Checks isEqualityOperator() works correctly', function( ) {
