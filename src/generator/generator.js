@@ -5,8 +5,11 @@ module.exports = (function() {
   var indentManager = require('./modules/IndentManager');
   var util = require('./modules/GeneratorUtil');
 
+  // :: CONSTANTS
+  var DEFAULT_FUNCTIONS = require('./../common/DEFAULT_FUNCTIONS');
+
   // :: OP
-  var __generateNode = function(node, method) {
+  var __generateNode = function (node, method) {
     if (node === null) {
       return '';
     }
@@ -23,6 +26,9 @@ module.exports = (function() {
     return result;
   };
 
+  // :: VARS
+  var uses = [];
+
   // :: API
   var api = {
     parse: function (tree) {
@@ -30,6 +36,9 @@ module.exports = (function() {
       
       code = __generateNode(tree);
       code = __processOutput(code);
+
+      console.log('USED FUNCSTIONS:');
+      console.log(uses);
 
       return code;
     }
@@ -108,6 +117,10 @@ module.exports = (function() {
     },
     CALL_STATEMENT: function (node) {
       var result = node.name;
+      if (DEFAULT_FUNCTIONS.hasOwnProperty(node.name)) {
+        result = DEFAULT_FUNCTIONS[node.name];
+        uses.push(result);
+      }
       return result;
     },
 

@@ -3,14 +3,12 @@ module.exports = (function () {
   'use strict';
   
   var DEFAULT_FUNCTIONS = {
-    long_millis: {
-      name: 'millis',
-      type: 'long'
-    },
-    pinRead: {
-      name: 'millis',
-      type: 'long'
-    }
+    millis: 'millis',
+    pinRead: 'digitalRead',
+    pinWrite: 'digitalWrite',
+    pinMode: 'pinMode',
+    print: 'Serial.print',
+    printn: 'Serial.println'
   };
 
   return DEFAULT_FUNCTIONS;
