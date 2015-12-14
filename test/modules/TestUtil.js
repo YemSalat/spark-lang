@@ -7,6 +7,7 @@ module.exports = (function () {
 	var SparkGenerator = require('../../src/generator/generator.js');
 
 	var CODE_DIR = './resources/code/';
+	var COMPARE_DIR = './resources/comparison/';
 
 	var api = {
 		getSyntaxTree: function (source) {
@@ -41,8 +42,23 @@ module.exports = (function () {
 		getFirstChild: function (tree) {
 			return tree.body[0];
 		},
-		checkComparison: function (filename, callback) {
-			
+		loadComparison: function (filename, callback) {
+			var result = [];
+			fs.readFile(COMPARE_DIR + filename, 'utf8', function (err, data) {
+				if (err) {
+					return console.log(err);
+				}
+				var cases = data.split(/%\s*\={5,}\s*%/g);
+				for (var i=0, l=cases.length; i<l; i++) {
+					var compare = cases[i].split(/%\s*\-{5,}\s*%/g);
+					if (typeof compare[1] !== 'undefined') {
+						var cmpSprk = compare[0].trim();
+						var cmpCpp = compare[1].trim();
+						result.push([cmpSprk, cmpCpp]);
+					}
+				}
+				callback(result);
+			});
 		},
 		loadCode: function (filename, callback) {
 			fs.readFile(CODE_DIR + filename, 'utf8', function (err, data) {

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-<testsuite name="Test code generated from files" errors="0" tests="0" failures="0" time="0" timestamp="2015-12-14T21:23:23">
+<testsuite name="Test code generated from files" errors="0" tests="0" failures="0" time="0" timestamp="2015-12-14T23:10:54">
 </testsuite>
-<testsuite name="Test code generated from files.Test code generation for /var-declarations.sprk" errors="0" tests="2" failures="0" time="0.065" timestamp="2015-12-14T21:23:23">
-  <testcase classname="Test code generated from files.Test code generation for /var-declarations.sprk" name="Checks number of variable declarations is correct" time="0.054"></testcase>
-  <testcase classname="Test code generated from files.Test code generation for /var-declarations.sprk" name="Checks variable types are correct" time="0.011"></testcase>
+<testsuite name="Test code generated from files.Test code generation comparison" errors="0" tests="1" failures="0" time="0.064" timestamp="2015-12-14T23:10:54">
+  <testcase classname="Test code generated from files.Test code generation comparison" name="Checks code comparison #1" time="0.064"></testcase>
 </testsuite>
-<testsuite name="Test code generated from files.Compare output for /var-declarations.sprk and /var-declarations-alt.sprk" errors="0" tests="1" failures="0" time="0.024" timestamp="2015-12-14T21:23:23">
-  <testcase classname="Test code generated from files.Compare output for /var-declarations.sprk and /var-declarations-alt.sprk" name="Checks parse trees are identical" time="0.024"></testcase>
+<testsuite name="Test code generated from files.Test code generation for /var-declarations.sprk" errors="0" tests="2" failures="0" time="0.022" timestamp="2015-12-14T23:10:54">
+  <testcase classname="Test code generated from files.Test code generation for /var-declarations.sprk" name="Checks number of variable declarations are correct" time="0.012"></testcase>
+  <testcase classname="Test code generated from files.Test code generation for /var-declarations.sprk" name="Checks variable types are correct" time="0.01"></testcase>
+</testsuite>
+<testsuite name="Test code generated from files.Compare output for /var-declarations/or/-alt.sprk" errors="0" tests="1" failures="0" time="0.027" timestamp="2015-12-14T23:10:54">
+  <testcase classname="Test code generated from files.Compare output for /var-declarations/or/-alt.sprk" name="Checks if implicit and explicit scopes are identical" time="0.027"></testcase>
 </testsuite>
 </testsuites>

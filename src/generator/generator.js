@@ -18,6 +18,23 @@ module.exports = (function() {
     return pNode;
   };
 
+  var __processOutput = function (code) {
+    var result = code.trim().replace(/(?!^)[ ]+/igm, ' ');
+    return result;
+  };
+
+  // :: API
+  var api = {
+    parse: function (tree) {
+      var code;
+      
+      code = __generateNode(tree);
+      code = __processOutput(code);
+
+      return code;
+    }
+  };
+
   // :: GENERATE
   var evaluate = {
 
@@ -215,13 +232,6 @@ module.exports = (function() {
 
   };
 
-  var api = {
-    parse: function (tree) {
-
-      var code = __generateNode(tree);
-      return code.trim();
-    }
-  };
   // :: SPARK GENERATOR
   global.SparkGenerator = api;
   return api;

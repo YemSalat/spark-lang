@@ -2,7 +2,9 @@ var util = require('../modules/TestUtil');
 var evaluatorUtil = require('../../src/evaluator/modules/EvaluatorUtil.js');
 
 describe('Test EvaluatorUtil', function() {
+
 	describe('Test assignment declaration', function() {
+
 		it( 'Checks integer types are converted correctly', function( ) {
 
 			expect( evaluatorUtil.getIntegerType(1) ).toEqual( 'byte' );
@@ -45,5 +47,6 @@ describe('Test EvaluatorUtil', function() {
 			expect( evaluatorUtil.isEqualityOperator('<') ).toEqual( false );
 			expect( evaluatorUtil.isEqualityOperator('is is not') ).toEqual( false );
 		});
+
 	});
 });
