@@ -92,7 +92,6 @@ gulp.task('parser', function() {
 });
 
 gulp.task('build_sparc', function () {
-	// set up the browserify instance on a task basis
 	exec('browserify --bare ./src/sparc.js > ./bin/sparc', function(err, out, code) {
 		if (err instanceof Error) {
 			return console.log(err);

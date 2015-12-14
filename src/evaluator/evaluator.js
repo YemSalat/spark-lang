@@ -8,7 +8,7 @@ module.exports = (function() {
   var util = require('./modules/EvaluatorUtil');
   
   // :: CONSTANTS
-  var DEFAULT_CONSTANTS = require('./../modules/DEFAULT_CONSTANTS');
+  var DEFAULT_CONSTANTS = require('./../common/DEFAULT_CONSTANTS');
 
   // :: ERRORS
   function SemanticError (name, message, location) {

@@ -2,7 +2,7 @@ module.exports = (function () {
   // :: SYMBOL TABLE
   'use strict';
 
-  var initialScope = require('../../modules/DEFAULT_CONSTANTS');
+  var initialScope = require('../../common/DEFAULT_CONSTANTS');
 
   var scopePointer = 1;
   var table = {
