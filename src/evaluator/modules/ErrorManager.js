@@ -14,7 +14,7 @@ module.exports = (function () {
   var errorMap = {
     VARIABLE_STATEMENT    : {
       type_mismatch       :   'variable "{0}" does not match type "{1}"',
-      already_exists      :   'variable "{0}" was already initialized as {1} on line {2}',
+      already_exists      :   'variable "{0}" was already initialized as \'{1}\' on line {2}',
       does_not_exist      :   'variable "{0}" is not defined'
                             },
     VARIABLE_DECLARATOR   : {

@@ -91,7 +91,11 @@ module.exports = (function() {
         }
         else {
           // add new variable to current scope
-          symbolTable.addSymbol(item, { value: null, type: node.type });
+          var cVal = '{expression}';
+          if (item.init['$$'] === 'LITERAL') {
+            cVal = item.init.value;
+          }
+          symbolTable.addSymbol(item, { value: cVal, type: node.type });
         }
       }
 
