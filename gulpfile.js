@@ -133,7 +133,7 @@ var report2Markdown = function (report) {
 		parseTestCase: function (node) {
 			var result = '';
 			var cNode = node['$'];
-			result += '- ' + cNode.name + ' *' + cNode.time + '* ';
+			result += '- ' + cNode.name + ' *' + cNode.time + '* \n';
 
 			return result
 		},
