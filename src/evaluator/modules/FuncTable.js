@@ -3,7 +3,6 @@ module.exports = (function () {
   'use strict';
 
   var table = {};
-  var nameTable = {};
   var currentFunc = {
     node: null,
     returns: []
