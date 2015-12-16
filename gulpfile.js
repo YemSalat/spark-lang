@@ -4,7 +4,8 @@ var PEG = require("pegjs");
 var minify = require('uglify-js').minify;
 var browserify = require('browserify');
 var prependFile = require('prepend-file');
-
+var xml2js = require('xml2js');
+var glob = require("glob")
 
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
@@ -55,7 +56,7 @@ gulp.task('generator', function () {
 });
 
 
-gulp.task('parser', function() {
+gulp.task('parser', function () {
 
 	// read grammar
 	fs.readFile('src/parser/spark-grammar.pegjs', 'utf8', function (err, data) {
@@ -70,16 +71,16 @@ gulp.task('parser', function() {
 		// append variable name
 		parserSource = 'global.SparkParser = module.exports = ' + parserSource;
 		// save file
-		fs.writeFile('src/parser/parser.js', parserSource, function(err) {
+		fs.writeFile('src/parser/parser.js', parserSource, function (err) {
 			if(err) {
 				return console.log(err);
 			}
-			exec('browserify ./src/parser/parser.js > ./build/parser.js', function(err, out, code) {
+			exec('browserify ./src/parser/parser.js > ./build/parser.js', function (err, out, code) {
 				if (err instanceof Error) {
 					return console.log(err);
 				}
 				var result = minify('build/parser.js');
-				fs.writeFile('build/parser.js', result.code, function(err) {
+				fs.writeFile('build/parser.js', result.code, function (err) {
 					if(err) {
 						return console.log(err);
 					}
@@ -92,16 +93,16 @@ gulp.task('parser', function() {
 });
 
 gulp.task('build_sparc', function () {
-	exec('browserify --bare ./src/sparc.js > ./bin/sparc', function(err, out, code) {
+	exec('browserify --bare ./src/sparc.js > ./bin/sparc', function (err, out, code) {
 		if (err instanceof Error) {
 			return console.log(err);
 		}
-		prependFile('bin/sparc', '#!/usr/bin/env node\n\n', function(err) {
+		prependFile('bin/sparc', '#!/usr/bin/env node\n\n', function (err) {
 			if(err) {
 				return console.log(err);
 			}
 			var result = minify('bin/sparc');
-			fs.writeFile('bin/sparc', result.code, function(err) {
+			fs.writeFile('bin/sparc', result.code, function (err) {
 				if(err) {
 					return console.log(err);
 				}
@@ -113,11 +114,85 @@ gulp.task('build_sparc', function () {
 	});
 });
 
-gulp.task('default', ['evaluator', 'generator'], function() {
+gulp.task('default', ['evaluator', 'generator'], function () {
 
 });
 
-gulp.task('build', ['parser', 'evaluator', 'generator'], function() {
+gulp.task('build', ['parser', 'evaluator', 'generator'], function () {
 
 });
 
+var report2Markdown = function (report) {
+	var indentSymbol = '  ';
+	var indentLevel = 0;
+	
+	var api = {
+		getCurrentIndent: function () {
+			currentIndent = Array(indentLevel + 1).join(indentSymbol);
+		},
+		parseTestCase: function (node) {
+			var result = '';
+			var cNode = node['$'];
+			result += '- ' + cNode.name + ' *' + cNode.time + '* ';
+
+			return result
+		},
+		parseTestSuite: function (node) {
+			var result = '';
+			var cNode = node['$'];
+
+			result += '**' + cNode.name + '**\n';
+
+
+			++indentLevel; // INCRESE indent
+			if (node.testcase) {
+				for (var i=0, l=node.testcase.length; i<l; i++) {
+					var cCase = node.testcase[i];
+					result += api.parseTestCase(cCase);
+				}
+			}
+			--indentLevel; // DECREASE indent
+
+			result += '\n\n';
+
+			return result;
+		},
+		parseReport: function (node) {
+			var result = '';
+			for (var i=0, l=node.testsuite.length; i<l; i++) {
+				var cSuite = node.testsuite[i];
+				console.log(JSON.stringify( cSuite, null, 2 ));
+				result += api.parseTestSuite( cSuite );
+			}
+			return result;
+		}
+	};
+
+	return api;
+};
+
+var reportConverter = report2Markdown();
+
+gulp.task('test', ['evaluator', 'generator'], function () {
+	exec('cd test && ../node_modules/jasmine-node/bin/jasmine-node --verbose --junitreport --color spec', function (err, out, code) {
+		if (err instanceof Error) {
+			return console.log(err);
+		}
+
+		var parser = new xml2js.Parser();
+
+		glob("./test/reports/**/*.xml", { nodir: true }, function (er, files) {	
+			for (var i=0,l=files.length; i<l; i++) {
+				var curFile = files[i];
+
+				fs.readFile(curFile, function(err, data) {
+				    parser.parseString(data, function (err, result) {
+				        console.log(reportConverter.parseReport( result.testsuites ));
+				    });
+				});
+				
+			}
+		});
+		 
+	});
+});
