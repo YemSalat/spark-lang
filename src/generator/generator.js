@@ -35,7 +35,7 @@ module.exports = (function() {
   };
 
   var __postProcess = function (code) {
-    var result = code.trim().replace(/(a-z0-9\{\}\(\))[ ]+/igm, '$1 ');
+    var result = code.trim().replace(/([a-z0-9])[ ]+/gi, '$1 ');
     return result;
   };
 
@@ -213,12 +213,18 @@ module.exports = (function() {
       indentManager.increase();
 
       node.body.forEach(function(item) {
-        result += indentManager.getCurrentIndent() + __generateNode(item) + ';\n';
+        result += indentManager.getCurrentIndent() + __generateNode(item);
+        if (!result.match(/\}\s*$/g)) {
+          result += ';\n';
+        }
+        if (!result.match(/\n\s*$/g)) {
+          result += '\n';
+        }
       });
 
       indentManager.decrease();
       
-      result += '}\n';
+      result += indentManager.getCurrentIndent() + '}\n';
 
       return result;
     },
@@ -227,7 +233,7 @@ module.exports = (function() {
       var result = '';
       node.body.forEach(function(item) {
         result += indentManager.getCurrentIndent() + __generateNode(item);
-        if (!result.match(/\}[\s]*$/)) {
+        if (!result.match(/\}\s*$/g)) {
           result += ';';
         }
         result += '\n';
@@ -247,7 +253,7 @@ module.exports = (function() {
       result += __generateNode(node.consequent);
 
       if (node.alternate) {
-      result += 'else ';
+      result += indentManager.getCurrentIndent() + 'else ';
         result += __generateNode(node.alternate);
       }
       return result;
