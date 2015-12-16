@@ -125,6 +125,7 @@ gulp.task('build', ['parser', 'evaluator', 'generator'], function () {
 var report2Markdown = function (report) {
 	var indentSymbol = '  ';
 	var indentLevel = 0;
+	var currentName = '';
 	
 	var api = {
 		getCurrentIndent: function () {
@@ -141,17 +142,30 @@ var report2Markdown = function (report) {
 			var result = '';
 			var cNode = node['$'];
 
-			result += '**' + cNode.name + '**\n';
-
-
-			++indentLevel; // INCRESE indent
 			if (node.testcase) {
+
+				var cName = cNode.name;
+				if (currentName !== '') {
+					var cRegex = cName.match(new RegExp('^'+currentName));
+					if (cRegex !== null) {
+
+					}
+				}
+
+				result += '**' + cNode.name + '**\n';
+
+
+				++indentLevel; // INCRESE indent
 				for (var i=0, l=node.testcase.length; i<l; i++) {
 					var cCase = node.testcase[i];
 					result += api.parseTestCase(cCase);
 				}
+				--indentLevel; // DECREASE indent
+				currentName = '';
 			}
-			--indentLevel; // DECREASE indent
+			else {
+				result += '##' + cNode.name + '\n\n';
+			}
 
 			result += '\n\n';
 
@@ -161,7 +175,6 @@ var report2Markdown = function (report) {
 			var result = '';
 			for (var i=0, l=node.testsuite.length; i<l; i++) {
 				var cSuite = node.testsuite[i];
-				console.log(JSON.stringify( cSuite, null, 2 ));
 				result += api.parseTestSuite( cSuite );
 			}
 			return result;

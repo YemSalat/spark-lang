@@ -35,7 +35,7 @@ module.exports = (function() {
   };
 
   var __postProcess = function (code) {
-    var result = code.trim().replace(/(?!^)[ ]+/igm, ' ');
+    var result = code.trim().replace(/(a-z0-9\{\}\(\))[ ]+/igm, '$1 ');
     return result;
   };
 
