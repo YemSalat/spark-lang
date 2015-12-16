@@ -1,6 +1,6 @@
 # Sparc(k) for Arduino compiler
 
-Online test: http://webcloudtools.com/sprk/lang-test/
+**Online test:** http://webcloudtools.com/sprk/lang-test/
 
 _Sparklang_ (aka Spark) is an open source programming language for Arduino
 The language compiler consists of 3 parts:
