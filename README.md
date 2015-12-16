@@ -1,11 +1,14 @@
 # Sparc(k) for Arduino compiler
 
+Online test: http://webcloudtools.com/sprk/lang-test/
+
 _Sparklang_ (aka Spark) is an open source programming language for Arduino
 The language compiler consists of 3 parts:
 
-1) Parser - generted by peg.js, which produces a parse tree for further analisys
-2) Evaluator - checks the semantics of the parse tree, produces AST
-3) Code Generator - produces C++ code based on the AST
+- Parser - generted by peg.js, which produces a parse tree for further analisys
+- Evaluator - checks the semantics of the parse tree, produces AST
+- Code Generator - produces C++ code based on the AST
+
 
 ### Requirements
 You will need node v5+ and npm (comes with node) - https://nodejs.org/
