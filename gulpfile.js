@@ -126,6 +126,9 @@ var report2Markdown = function (report) {
 	var indentSymbol = '  ';
 	var indentLevel = 0;
 	var currentName = '';
+	var quote = function (str) {
+	    return str.replace(/(?=[\/\\^$*+?.()|{}[\]])/g, "\\");
+	};
 	
 	var api = {
 		getCurrentIndent: function () {
@@ -146,9 +149,9 @@ var report2Markdown = function (report) {
 
 				var cName = cNode.name;
 				if (currentName !== '') {
-					var cRegex = cName.match(new RegExp('^'+currentName));
+					var cRegex = cName.match(new RegExp('^'+ quote(currentName) +'\\.'));
 					if (cRegex !== null) {
-
+						cName = cName.replace()
 					}
 				}
 
@@ -164,7 +167,7 @@ var report2Markdown = function (report) {
 				currentName = '';
 			}
 			else {
-				result += '##' + cNode.name + '\n\n';
+				result += '##' + cNode.name + '';
 			}
 
 			result += '\n\n';
@@ -198,11 +201,27 @@ gulp.task('test', ['evaluator', 'generator'], function () {
 			for (var i=0,l=files.length; i<l; i++) {
 				var curFile = files[i];
 
-				fs.readFile(curFile, function(err, data) {
-				    parser.parseString(data, function (err, result) {
-				        console.log(reportConverter.parseReport( result.testsuites ));
-				    });
-				});
+				(function (curFile) {
+					fs.readFile(curFile, function(err, data) {
+						if (err) {
+							console.log(err);
+						}
+					    parser.parseString(data, function (err, result) {
+					    	if (err) {
+					    		console.log(err);
+					    	}
+					    	var mdFilename = curFile.split('.').slice(0, -1).join('.') + '.md';
+					    	var mdReport = reportConverter.parseReport( result.testsuites );
+					        fs.writeFile(mdFilename, mdReport, function(err, data) {
+					        	if (err) {
+					        		console.log(err);
+					        	}
+					            console.log(mdFilename + ' :: saved');
+					        });
+					    });
+					});
+				})(curFile);
+
 				
 			}
 		});
