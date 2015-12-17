@@ -151,15 +151,24 @@ module.exports = (function() {
       }
 
       // check duplicate params
-      var cParam = util.checkParamDuplicates(node.params);
-      if (cParam) {
-        return errorManager.logError(cParam, cParam.location, 'duplicate_param', [cParam.id.name]);
+      var cParamDupes = util.checkParamDuplicates(node.params);
+      if (cParamDupes) {
+        return errorManager.logError(cParamDupes, cParamDupes.location, 'duplicate_param', [cParamDupes.id.name]);
       }
 
       funcTable.addFunc(node);
 
       // increase current scope
       symbolTable.enterScope();
+
+      // eval params
+      if (node.params) {
+        for (var i=0,l=node.params.length; i<l; i++) {
+          var item = __evalNode(node.params[i]);
+          symbolTable.addSymbol(item, { value: null, type: item.type });
+        }
+      }
+
       // enter function (used for return check)
       funcTable.enterFunc(node);
       // parse function body
@@ -626,7 +635,7 @@ module.exports = (function () {
     },
 
     funcAddReturn: function (node) {
-      current.returns.push(node);
+      currentFunc.returns.push(node);
     },
 
     getSignature: function (node) {

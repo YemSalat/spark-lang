@@ -37,7 +37,7 @@ module.exports = (function () {
     },
 
     funcAddReturn: function (node) {
-      current.returns.push(node);
+      currentFunc.returns.push(node);
     },
 
     getSignature: function (node) {
