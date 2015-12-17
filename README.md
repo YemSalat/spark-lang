@@ -91,7 +91,7 @@ Aliases for the built-in Arduino functions:
 - after you built all the compiler modules - you can build the binary compiler with `gulp build_sparc`
 
 ### Running tests
-- run `npm test` from the project root directory
+- run `gulp test` from the project root directory (this will generate markdown reports in the _/test/reports/_ folder)
 - alternatively you can run `jasmine` or `jasmine-node` with custom options from the test/ directory 
 
 
