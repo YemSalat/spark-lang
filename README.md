@@ -88,7 +88,7 @@ Aliases for the built-in Arduino functions:
 ### Building the compiler
 - from project root run `gulp build_browser` to build all compiler modules
 - alternatively you can run `gulp parser`, `gulp evaluator` or `gulp generator` to build compiler modules separately
-- after you built all the compiler components - you can build the binary compiler with `gulp build_sparc`
+- after you built all the compiler modules - you can build the binary compiler with `gulp build_sparc`
 
 ### Running tests
 - run `npm test` from the project root directory
