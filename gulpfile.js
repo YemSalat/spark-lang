@@ -137,7 +137,8 @@ var report2Markdown = function (report) {
 		parseTestCase: function (node) {
 			var result = '';
 			var cNode = node['$'];
-			result += '- ' + cNode.name + ' *' + cNode.time + '* \n';
+			var cTime = (parseFloat(cNode.time) * 1000).toFixed() + 'ms';
+			result += '- ' + cNode.name + ' - *' + cTime + '* \n';
 
 			return result
 		},
@@ -216,6 +217,11 @@ gulp.task('test', ['evaluator', 'generator'], function () {
 					        	if (err) {
 					        		console.log(err);
 					        	}
+					        	fs.unlink(curFile, function(err) {
+					        		if (err) {
+					        			console.log(err);
+					        		}
+					        	});
 					            console.log(mdFilename + ' :: saved');
 					        });
 					    });
