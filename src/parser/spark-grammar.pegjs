@@ -1100,7 +1100,7 @@ FormalParameterDeclarationList
 
 ParameterDeclaration
   = head:VariableType _nbws_ tail:Identifier {
-    return { $$: "PARAM_DECLARATOR", type: head, id: tail, location: getLocation() };
+    return { location: getLocation(), $$: "PARAM_DECLARATOR", type: head, id: tail };
   }
 
 FormalParameterList

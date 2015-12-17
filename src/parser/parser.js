@@ -651,7 +651,7 @@ global.SparkParser = module.exports = (function() {
               };
             },
         peg$c348 = function(head, tail) {
-            return { $$: "PARAM_DECLARATOR", type: head, id: tail, location: getLocation() };
+            return { location: getLocation(), $$: "PARAM_DECLARATOR", type: head, id: tail };
           },
         peg$c349 = function(body) {
               return {
