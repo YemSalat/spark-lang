@@ -1,2 +1,774 @@
-!function t(e,n,r){function o(i,u){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!u&&c)return c(i,!0);if(a)return a(i,!0);var l=new Error("Cannot find module '"+i+"'");throw l.code="MODULE_NOT_FOUND",l}var s=n[i]={exports:{}};e[i][0].call(s.exports,function(t){var n=e[i][1][t];return o(n?n:t)},s,s.exports,t,e,n,r)}return n[i].exports}for(var a="function"==typeof require&&require,i=0;i<r.length;i++)o(r[i]);return o}({1:[function(t,e,n){e.exports=function(){"use strict";var t={LOW:{name:"LOW",type:"int",value:0},HIGH:{name:"HIGH",type:"int",value:1},READ:{name:"READ",type:"int",value:0},WRITE:{name:"WRITE",type:"int",value:1}};return t}()},{}],2:[function(t,e,n){(function(n){e.exports=function(){"use strict";function e(t,e,n){this.name=t,this.message=e,this.location=n}var r=t("./modules/SymbolTable"),o=t("./modules/FuncTable"),a=t("./modules/ErrorManager"),i=t("./modules/EvaluatorUtil"),u=(t("./../common/DEFAULT_CONSTANTS"),function(t,n){var r=n||null!==t?t.$$:null,o=null;if(r){if(o=l[r](t),o.error)throw new e("SemanticError",o.error.message,o.error.location)}else console.log("Node evaluation method is not defined for:"),console.log(t);return o}),c={parse:function(t,e){r.reset(),o.reset();var n=u(t);return{tree:n,symbolScope:r.getTable(),funcScope:o.getTable()}}},l={DOCSTRING:function(t){return t},VARIABLE_STATEMENT:function(t){for(var e=t.type,n=0,o=t.declarations.length;o>n;n++){var c=t.declarations[n],l=null;if(null!==c.init){c.init=u(c.init);var s=i.typeCheck(t.type,c.init.type);if(!s)return a.logError(t,t.location,"type_mismatch",[c.id.name,e]);t.type=s,l=s}c.type=l;var f=c.id.name,p=r.checkScope(f);if(p)return a.logError(t,t.location,"already_exists",[c.id.name,p.value,p.initLine]);var d=null;"LITERAL"===c.init.$$&&(d=c.init.value),r.addSymbol(c,{value:d,type:t.type})}return t},VARIABLE_DECLARATOR:function(t){return t},FUNCTION_DECLARATION:function(t){var e=o.findFunc(t);if(e)return a.logError(t,t.location,"already_exists",[e.name,e.initLine]);var n=i.checkParamDuplicates(t.params);return n?a.logError(n,n.location,"duplicate_param",[n.id.name]):(o.addFunc(t),r.enterScope(),o.enterFunc(t),t.body=u(t.body),o.exitFunc(),r.exitScope(),t)},PARAM_DECLARATOR:function(t){return t},RETURN_STATEMENT:function(t){t.argument=u(t.argument),t.type=t.argument.type;var e=getCurrentFunc();if(!e.node)return a.logError(t,t.location,"return_outside");var n=i.typeCheck(t.type,e.type);return n?t:a.logError(t,t.location,"type_mismatch",[e.node.id.name])},CALL_STATEMENT:function(t){return t.type="int",t},FOR_STATEMENT:function(t){return t.init=u(t.init),t.test=u(t.test),t.update=u(t.update),t.body=u(t.body),t},BREAK_STATEMENT:function(t){return t},CONTINUE_STATEMENT:function(t){return t},EXPRESSION_STATEMENT:function(t){var e=u(t.expression);return e},IDENTIFIER:function(t){var e=t.name,n=r.findSymbol(e);return n?(t.type=n.type,t):a.logError(t,t.location,"does_not_exist",[e])},LITERAL:function(t){return"int"===t.type&&(t.type=i.getIntegerType(t.value)),t},BINARY_EXPRESSION:function(t){return t.left=u(t.left),t.right=u(t.right),t.type=i.typeCheck(t.left.type,t.right.type),t.type?t:a.logError(t,t.location,"type_mismatch",[t.operator,t.left.type,t.right.type])},ASSIGNMENT_STATEMENT:function(t){t.right=u(t.right);var e=t.left.name,n=r.findSymbol(e);if(!n)return u(i.constructVarDeclarator(t));t.left=u(t.left);var o=i.typeCheck(t.left.type,t.right.type);return o?t:a.logError(t,t.location,"type_mismatch",[t.right.type,t.left.type])},ASSIGNMENT_ACTION:function(t){return t},BLOCK_STATEMENT:function(t){return r.enterScope(),t.body.forEach(function(t){t=u(t)}),r.exitScope(),t},PROGRAM:function(t){return t.body.forEach(function(t){t=u(t)}),t},IF_STATEMENT:function(t){return t.test=u(t.test),"bool"!==t.test.type?a.logError(t,t.test.location,"not_a_bool"):(t.consequent=u(t.consequent),t.alternate&&(t.alternate=u(t.alternate)),t)},LOGICAL_EXPRESSION:function(t){t.left=u(t.left),t.right=u(t.right);var e=i.typeCheck(t.left.type,t.right.type);return e?i.isEqualityOperator(t.operator)||i.isNumber(e)?t:a.logError(t,t.location,"not_a_number",[t.operator]):a.logError(t,t.location,"type_mismatch",[t.left.type,t.right.type])},UPDATE_EXPRESSION:function(t){return t.argument=u(t.argument),i.isNumber(t.argument.type)?(t.type=t.argument.type,t):a.logError(t,t.location,"not_a_number")},UNARY_EXPRESSION:function(t){return t.argument=u(t.argument),"!"===t.operator&&"bool"!==t.argument.type?a.logError(t,t.location,"not_a_bool"):(t.type=t.argument.type,t)}};return n.SparkEvaluator=c,c}()}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./../common/DEFAULT_CONSTANTS":1,"./modules/ErrorManager":3,"./modules/EvaluatorUtil":4,"./modules/FuncTable":5,"./modules/SymbolTable":6}],3:[function(t,e,n){e.exports=function(){"use strict";var t={operator:{"+":"add","-":"subtract","*":"multiply","/":"divide"}},e={VARIABLE_STATEMENT:{type_mismatch:'variable "{0}" does not match type "{1}"',already_exists:"variable \"{0}\" was already initialized as '{1}' on line {2}",does_not_exist:'variable "{0}" is not defined'},VARIABLE_DECLARATOR:{already_initialized:'variable "{0}" was already initialized as {1} on line {2}',already_declared:'variable "{0}" was already declared on line {1}'},FUNCTION_DECLARATION:{already_exists:'function "{0}" was already declared on line {1}'},PARAM_DECLARATOR:{duplicate_param:'duplicate parameter "{0}"'},RETURN_STATEMENT:{return_outside:"return statement outside function declaration",type_mismatch:'return statement type does not match function "{0}"'},IDENTIFIER:{does_not_exist:'variable "{0}" does not exist'},BINARY_EXPRESSION:{type_mismatch:'"{0}" operation types do not match, can\'t {operator: 0} "{1}" and "{2}"'},LOGICAL_EXPRESSION:{type_mismatch:'can\'t compare "{0}" and "{1}"',cant_compare:'can\'t compare "{0}" and "{1}"',not_a_number:'can use "{0}" operator only on numbers'},ASSIGNMENT_STATEMENT:{type_mismatch:'assignment types mismatch, can\'t assign "{0}" to "{1}"'},UPDATE_EXPRESSION:{not_a_number:"expression is not a number"},UNARY_EXPRESSION:{not_a_bool:"unary expression must be a boolean"},IF_STATEMENT:{not_a_bool:"IF condition must be a boolean"}},n=function(n,r,o,a){var i="string"==typeof n?n:n.$$,u=e[i][o];if(a)for(var c=0,l=a.length;l>c;c++){var s=(a[c],new RegExp("\\{[ ]*([a-z]+)[ ]*\\:[ ]*"+c+"[ ]*\\}","gi")),f=new RegExp("\\{[ ]*"+c+"[ ]*\\}","gi");u=u.replace(s,function(e,n){var r=t[n];return r[a[c]]}),u=u.replace(f,a[c])}var p={error:{location:r,message:u,node:n}};return p},r={logError:n};return r}()},{}],4:[function(t,e,n){e.exports=function(){"use strict";var t=["byte","int","long","float"],e=["==","!=","is","is not"],n={"byte":128,"int":32767,"long":2147483647},r={constructVarDeclarator:function(t){return t.$$="VARIABLE_STATEMENT",t.type=t.right.type,t.declarations=[{$$:"VARIABLE_DECLARATOR",id:{location:t.left.location,$$:"IDENTIFIER",name:t.left.name},location:t.left.location,init:t.right}],t},typeCheck:function(e,n){if(!e||!n)return!1;if(e===n)return e;var r=t.indexOf(e);if(r>-1){var o=t.indexOf(n);return o>-1?(o>r&&(e=n),e):!1}return!1},getParameters:function(t){},checkParamDuplicates:function(t){for(var e=1,n=t.length;n>e;e++)for(var r=t[e],o=0;e>o;o++){var a=t[o];if(a.id.name===r.id.name)return r}return!1},isNumber:function(e){return t.indexOf(e)>-1},isEqualityOperator:function(t){return e.indexOf(t)>-1},getIntegerType:function(t){var e=parseInt(t,10),r=Math.abs(e),o="int",a=n["long"];for(var i in n)if(n.hasOwnProperty(i)){var u=n[i];u>=r&&a>=u&&(o=i,a=u)}return o}};return r}()},{}],5:[function(t,e,n){e.exports=function(){"use strict";var t={},e={node:null,returns:[]},n={getTable:function(){return t},reset:function(){t={},e={node:null,returns:[]}},getCurrentFunc:function(){return e},enterFunc:function(t){e.node=t},exitFunc:function(){e={node:null,returns:[]}},funcAddReturn:function(t){current.returns.push(t)},getSignature:function(t){for(var e=t.type+"__"+t.id.name+"__",n=0,r=t.params.length;r>n;n++)e+=t.params[n].type+"_";return e+="fn"},getParams:function(t){for(var e=[],n=0,r=t.length;r>n;n++){var o=t[n];e.push({type:o.type,name:o.id.name})}return e},findFunc:function(e){var r=n.getSignature(e);return t.hasOwnProperty(r)?t[r]:null},addFunc:function(e){var r=n.getSignature(e),o=e.id.name,a=e.type,i=n.getParams(e.params),u=e.location.start.line,c=e.doc?e.doc.body:"";t[r]={name:o,type:a,params:i,initLine:u,doc:c}}};return n}()},{}],6:[function(t,e,n){e.exports=function(){"use strict";var e=t("../../common/DEFAULT_CONSTANTS"),n=1,r={sc0:e,sc1:{}},o=r["sc"+n],a={setInitialScope:function(t){e=t,a.reset()},getTable:function(){return r},reset:function(){n=1,r={sc0:e,sc1:{}},o=r["sc"+n]},enterScope:function(){n+=1,r["sc"+n]={},o=r["sc"+n]},exitScope:function(){n>1&&(r["sc"+n]=null),n-=1,o=r["sc"+n]},getScope:function(t){var e="udefined"!=typeof t?t:n;return r["sc"+e]},findSymbol:function(t){for(var e=n;e>=0;e--){var r=a.getScope(e);if(r.hasOwnProperty(t))return r[t]}return null},addSymbol:function(t,e){var n=e||t.init,r=t.id.name,a=n.value,i=n.type,u=t.location.start.line;o[r]={name:r,value:a,type:i,initLine:u}},checkScope:function(t){return o.hasOwnProperty(t)?o[t]:!1}};return a}()},{"../../common/DEFAULT_CONSTANTS":1}]},{},[2]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = (function () {
+  // :: CONSTANTS
+  'use strict';
+  
+  var DEFAULT_CONSTANTS = {
+    LOW: {
+      name: 'LOW',
+      type: 'int',
+      value: 0
+    },
+    HIGH: {
+      name: 'HIGH',
+      type: 'int',
+      value: 1
+    },
+    READ: {
+      name: 'READ',
+      type: 'int',
+      value: 0
+    },
+    WRITE: {
+      name: 'WRITE',
+      type: 'int',
+      value: 1
+    }
+  };
+
+  return DEFAULT_CONSTANTS;
+
+})();
+},{}],2:[function(require,module,exports){
+(function (global){
+module.exports = (function() {
+  'use strict';
+
+  // :: MODULES
+  var symbolTable = require('./modules/SymbolTable')
+  var funcTable = require('./modules/FuncTable');
+  var errorManager = require('./modules/ErrorManager');
+  var util = require('./modules/EvaluatorUtil');
+  
+  // :: CONSTANTS
+  var DEFAULT_CONSTANTS = require('./../common/DEFAULT_CONSTANTS');
+
+  // :: ERRORS
+  function SemanticError (name, message, location) {
+    this.name = name;
+    this.message = message;
+    this.location = location;
+  }
+
+  // :: OP
+  var __evalNode = function(node, method) {
+    var mType = method ||
+                (node !== null) ? node['$$'] : null;
+
+    var pNode = null;
+    if (mType) {
+      pNode = evaluate[mType](node)
+      if (pNode.error) {
+        throw new SemanticError('SemanticError', pNode.error.message, pNode.error.location);
+      }
+    }
+    else {
+      console.log('Node evaluation method is not defined for:');
+      console.log(node);
+    }
+
+    return pNode;
+  };
+
+  var api = {
+    parse: function (tree, options) {
+      // reset tables
+      symbolTable.reset(); 
+      funcTable.reset();
+
+      var _tree = __evalNode(tree);
+      
+      return {
+        tree: _tree,
+        symbolScope: symbolTable.getTable(),
+        funcScope: funcTable.getTable()
+      };
+    }
+  };
+
+  // :: EVALUATE
+  var evaluate = {
+
+    DOCSTRING: function(node) {
+      return node;
+    },
+    
+    VARIABLE_STATEMENT: function(node) {
+      var varType = node.type;
+
+      for (var i=0,l=node.declarations.length; i<l; i++) {
+        var item = node.declarations[i];
+        
+        // eval right side
+        var initType = null;
+        if (item.init !== null) {
+          item.init = __evalNode(item.init);
+          // check types
+          var cType = util.typeCheck(node.type, item.init.type);
+          if (!cType) {
+            return errorManager.logError(node, node.location, 'type_mismatch', [item.id.name, varType]);
+          }
+          else {
+            node.type = cType;
+          }
+          initType = cType;
+        }
+        // set identifier type
+        item.type = initType;
+        // check if variable exists
+        var varName = item.id.name;
+        var variable = symbolTable.checkScope(varName);
+        if (variable) {
+          // error
+          return errorManager.logError(node, node.location, 'already_exists', [item.id.name, variable.value, variable.initLine]);
+        }
+        else {
+          // add new variable to current scope
+          var cVal = '{null}';
+          if (item.init) {
+            cVal = '{expression}';
+            if (item.init['$$'] === 'LITERAL') {
+              cVal = item.init.value;
+            }
+          }
+          symbolTable.addSymbol(item, { value: cVal, type: node.type });
+        }
+      }
+
+      return node;
+    },
+
+    VARIABLE_DECLARATOR: function (node) {
+      return node;
+    },
+
+
+    FUNCTION_DECLARATION: function (node) {
+      var cFunc = funcTable.findFunc(node);
+      if (cFunc) {
+        // error
+        return errorManager.logError(node, node.location, 'already_exists', [cFunc.name, cFunc.initLine]);
+      }
+
+      // check duplicate params
+      var cParam = util.checkParamDuplicates(node.params);
+      if (cParam) {
+        return errorManager.logError(cParam, cParam.location, 'duplicate_param', [cParam.id.name]);
+      }
+
+      funcTable.addFunc(node);
+
+      // increase current scope
+      symbolTable.enterScope();
+      // enter function (used for return check)
+      funcTable.enterFunc(node);
+      // parse function body
+      node.body = __evalNode(node.body);
+      // evaluate return statemnts
+      var curFunc = funcTable.getCurrentFunc();
+      var returnAmount = curFunc.returns.length;
+      if (node.type !== 'void' && returnAmount === 0) {
+        return errorManager.logError(node, node.location, 'must_return', [node.id.name, node.type]);
+      }
+      // exit function
+      funcTable.exitFunc();
+      // exit scope
+      symbolTable.exitScope();
+
+      return node;
+    },
+    PARAM_DECLARATOR: function (node) {
+      return node;
+    },
+    RETURN_STATEMENT: function (node) {
+      node.argument = __evalNode(node.argument);
+      // set return statement type
+      node.type = (node.argument) ? node.argument.type : 'void';
+
+      // check type matches current function
+      var curFunc = funcTable.getCurrentFunc();
+      if (!curFunc.node) {
+        return errorManager.logError(node, node.location, 'return_outside');
+      }
+      var cType = util.typeCheck(node.type, curFunc.node.type);
+      if (!cType) {
+        return errorManager.logError(node, node.location, 'type_mismatch', [curFunc.node.id.name, curFunc.node.type]);
+      }
+
+      // add return
+      funcTable.funcAddReturn(node);
+
+      return node;
+    },
+    CALL_STATEMENT: function (node) {
+      node.type = 'int';
+      return node;
+    },
+
+    FOR_STATEMENT: function (node) {
+      node.init = __evalNode(node.init);
+      node.test = __evalNode(node.test);
+      node.update = __evalNode(node.update);
+      node.body = __evalNode(node.body);
+
+      return node;
+    },
+    BREAK_STATEMENT: function (node) {
+      return node;
+    },
+    CONTINUE_STATEMENT: function (node) {
+      return node;
+    },
+
+
+    EXPRESSION_STATEMENT: function (node) {
+      var newNode = __evalNode(node.expression);
+      return newNode;
+    },
+
+    IDENTIFIER: function (node) {
+      // check if variable exists
+      var varName = node.name;
+      var variable = symbolTable.findSymbol(varName);
+      if (variable) {
+        // assign node type
+        node.type = variable.type;
+      } else {
+        // error
+        return errorManager.logError(node, node.location, 'does_not_exist', [varName]);
+      }
+
+      return node;
+    },
+
+    LITERAL: function(node) {
+      // convert int type
+      if (node.type === 'int') {
+        node.type = util.getIntegerType(node.value);
+      }
+
+      return node;
+    },
+
+    BINARY_EXPRESSION: function (node) {
+      // eval left and right parts first
+      node.left = __evalNode(node.left);
+      node.right = __evalNode(node.right);
+      // assign node type
+      // check types
+      node.type = util.typeCheck(node.left.type, node.right.type);
+      // error
+      if (!node.type) {
+        return errorManager.logError(node, node.location, 'type_mismatch', [node.operator, node.left.type, node.right.type]);
+      }
+      return node;
+    },
+
+    ASSIGNMENT_STATEMENT: function (node) {
+      // eval asignment right hand side
+      node.right = __evalNode(node.right);
+      // check if variable exists
+      var varName = node.left.name;
+      var variable = symbolTable.findSymbol(varName);
+      if (!variable) {
+        // eval as variable statement instead
+        return __evalNode(util.constructVarDeclarator(node));
+      }
+      // eval left hand side
+      node.left = __evalNode(node.left);
+
+      // check types
+      var cType = util.typeCheck(node.left.type, node.right.type);
+      if (!cType) {
+        return errorManager.logError(node, node.location, 'type_mismatch', [node.right.type, node.left.type]);
+      }
+
+      return node;
+    },
+
+    ASSIGNMENT_ACTION: function (node) {
+      return node;
+    },
+
+    BLOCK_STATEMENT: function (node) {
+      // increase current scope
+      symbolTable.enterScope();
+
+      node.body.forEach(function(item) {
+        item = __evalNode(item);
+      });
+
+      // decrease scope
+      symbolTable.exitScope();
+      
+      return node;
+    },
+
+    PROGRAM: function (node) {
+
+      node.body.forEach(function(item) {
+        item = __evalNode(item);
+      });
+      
+      return node;
+    },
+
+    IF_STATEMENT: function (node) {
+      // parse test condition
+      node.test = __evalNode(node.test);
+      // check test type
+      if (node.test.type !== 'bool') {
+        return errorManager.logError(node, node.test.location, 'not_a_bool');
+      }
+
+      // parse consequent and alternate
+      node.consequent = __evalNode(node.consequent);
+      if (node.alternate) {
+        node.alternate = __evalNode(node.alternate);
+      }
+      return node;
+    },
+
+    LOGICAL_EXPRESSION: function (node) {
+      node.left = __evalNode(node.left);
+      node.right = __evalNode(node.right);
+
+      // check types
+      var cType = util.typeCheck(node.left.type, node.right.type);
+      if (!cType) {
+        // error
+        return errorManager.logError(node, node.location, 'type_mismatch', [node.left.type, node.right.type]);
+      }
+      else if (!util.isEqualityOperator(node.operator) && !util.isNumber(cType)) {
+        // cant compare
+        return errorManager.logError(node, node.location, 'not_a_number', [node.operator]);
+      }
+      return node;
+    },
+
+    UPDATE_EXPRESSION: function (node) {
+      node.argument = __evalNode(node.argument);
+      if (!util.isNumber(node.argument.type)) {
+        // error
+        return errorManager.logError(node, node.location, 'not_a_number');
+      }
+      node.type = node.argument.type; 
+      return node;
+    },
+
+    UNARY_EXPRESSION: function (node) {
+      node.argument = __evalNode(node.argument);
+      // check 'not' operator is a boolean
+      if (node.operator === '!' && node.argument.type !== 'bool') {
+        // error
+        return errorManager.logError(node, node.location, 'not_a_bool');
+      }
+      node.type = node.argument.type;
+      return node;
+    }
+
+  };
+
+  // :: SPARK EVALUATOR
+  global.SparkEvaluator = api;
+  return api;
+
+})();
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{"./../common/DEFAULT_CONSTANTS":1,"./modules/ErrorManager":3,"./modules/EvaluatorUtil":4,"./modules/FuncTable":5,"./modules/SymbolTable":6}],3:[function(require,module,exports){
+module.exports = (function () {
+  // :: ERROR MANAGER
+  'use strict';
+
+  var errorConvertMaps = {
+    operator: {
+      '+' : 'add',
+      '-' : 'subtract',
+      '*' : 'multiply',
+      '/' : 'divide'
+    },
+    typeArticle: {
+      'int'   : 'an',
+      'byte'  : 'a',
+      'long'  : 'a',
+      'float' : 'a',
+      'bool'  : 'a',
+      'str'   : 'a'
+    }
+  };
+
+  var errorMap = {
+    VARIABLE_STATEMENT    : {
+      type_mismatch       :   'variable "{0}" does not match type "{1}"',
+      already_exists      :   'variable "{0}" was already initialized as \'{1}\' on line {2}',
+      does_not_exist      :   'variable "{0}" is not defined'
+                            },
+    VARIABLE_DECLARATOR   : {
+      already_initialized :   'variable "{0}" was already initialized as {1} on line {2}',
+      already_declared    :   'variable "{0}" was already declared on line {1}'
+                            },
+    FUNCTION_DECLARATION  : {
+      already_exists      :   'function "{0}" was already declared on line {1}',
+      must_return         :   'function "{0}" must return {typeArticle: 1} "{1}"'
+                            },
+    PARAM_DECLARATOR      : {
+      duplicate_param     :   'duplicate parameter "{0}"'
+                            },
+    RETURN_STATEMENT      : {
+      return_outside      :   'return statement outside function declaration',
+      type_mismatch       :   'return statement type does not match function "{0}" of type "{1}"'
+                            },
+    IDENTIFIER            : {
+      does_not_exist      :   'variable "{0}" does not exist'
+                            },
+    BINARY_EXPRESSION     : {
+      type_mismatch       :   '"{0}" operation types do not match, can\'t {operator: 0} "{1}" and "{2}"'
+                            },
+    LOGICAL_EXPRESSION    : {
+      type_mismatch       :   'can\'t compare "{0}" and "{1}"',
+      cant_compare        :   'can\'t compare "{0}" and "{1}"',
+      not_a_number        :   'can use "{0}" operator only on numbers'
+                            },
+    ASSIGNMENT_STATEMENT  : {
+      type_mismatch       :   'assignment types mismatch, can\'t assign "{0}" to "{1}"'
+                            },
+    UPDATE_EXPRESSION     : {
+      not_a_number        :   'expression is not a number'
+                            },
+    UNARY_EXPRESSION      : {
+      not_a_bool          :   'unary expression must be a boolean'
+                            },
+    IF_STATEMENT          : {
+      not_a_bool          :   'IF condition must be a boolean'
+                            }
+  };
+
+  // log error
+  var logError = function(node, location, errorType, params) {
+    var errorCategory = (typeof node === 'string') ? node : node['$$'];
+    var errorMessage = errorMap[errorCategory][errorType];
+    // 'parse' error message
+    if (params) {
+      for (var i=0,l=params.length; i<l; i++) {
+        var parameter = params[i];
+        var paramRegexA = new RegExp('\\{[ ]*([a-z]+)[ ]*\\:[ ]*'+ i +'[ ]*\\}', 'gi');
+        var paramRegexB = new RegExp('\\{[ ]*'+ i +'[ ]*\\}', 'gi');
+        errorMessage = errorMessage.replace(paramRegexA, function (a, b) {
+          var cMap = errorConvertMaps[b];
+          return cMap[params[i]];
+        });
+        errorMessage = errorMessage.replace(paramRegexB, params[i]);
+      }
+    }
+
+    var err = {
+      error: {
+        location: location,
+        message: errorMessage,
+        node: node
+      }
+    }
+
+    return err;
+  }
+
+  // api
+  var api = {
+    logError: logError
+  }
+
+
+  // :: EXPORT
+  return api;
+
+})();
+},{}],4:[function(require,module,exports){
+module.exports = (function () {
+  // :: UTILS
+  'use strict';
+  var numberTypeScale = ['byte', 'int', 'long', 'float'];
+  var equalityOperatorMap = ['==', '!=', 'is', 'is not'];
+  var signedIntegerLimits = {
+    'byte': 128,
+    'int': 32767,
+    'long': 2147483647
+  };
+  
+  var api = {
+    constructVarDeclarator: function (node) {
+      node['$$'] = 'VARIABLE_STATEMENT';
+      node.type = node.right.type;
+      node.declarations = [
+        {
+          '$$': 'VARIABLE_DECLARATOR',
+          'id': {
+            'location': node.left.location,
+            '$$': 'IDENTIFIER',
+            'name': node.left.name
+          },
+          'location': node.left.location,
+          'init': node.right
+        }
+      ];
+
+      return node;
+    },
+    typeCheck: function (leftType, rightType) {
+      if (!leftType || !rightType) {
+        return false;
+      }
+      // types match - return
+      if (leftType === rightType) {
+        return leftType;
+      }
+
+      // check numbers
+      var iLeft = numberTypeScale.indexOf(leftType);
+      if (iLeft > -1) {
+        var iRight = numberTypeScale.indexOf(rightType);
+        if (iRight > -1) {
+          // promote left type
+          if (iLeft < iRight) {
+            leftType = rightType;
+          }
+          return leftType;
+        }
+        // left is number, right is not
+        return false;
+      }
+
+      return false;
+    },
+    getParameters: function (paramArray) {
+
+    },
+    checkParamDuplicates: function (params) {
+      for (var i=1,l=params.length; i<l; i++) {
+        var curPram = params[i];
+        for (var j=0; j<i; j++) {
+          var prvParam = params[j];
+          if (prvParam.id.name === curPram.id.name) {
+            return curPram;
+          }
+        }
+      }
+      return false;
+    },
+    isNumber: function (type) {
+      return numberTypeScale.indexOf(type) > -1;
+    },
+    isEqualityOperator: function (operator) {
+      return equalityOperatorMap.indexOf(operator) > -1;
+    },
+    getIntegerType: function (number) {
+      var nmb = parseInt(number, 10);
+      var a_nmb = Math.abs(nmb);
+
+      var resType = 'int';
+      var last = signedIntegerLimits['long'];
+
+      for (var nType in signedIntegerLimits) {
+        if (signedIntegerLimits.hasOwnProperty(nType)) {
+          var limit = signedIntegerLimits[nType];
+          if (a_nmb <= limit && last >= limit) {
+            resType = nType;
+            last = limit;
+          }
+        }
+      }
+
+      return resType;
+    }
+  };
+  // :: EXPORT
+  return api;
+
+})();
+},{}],5:[function(require,module,exports){
+module.exports = (function () {
+  // :: FUNCTION TABLE
+  'use strict';
+
+  var table = {};
+  var currentFunc = {
+    node: null,
+    returns: []
+  };
+  
+  var api = {
+    getTable: function () {
+      return table;
+    },
+
+    reset: function () {
+      table = {};
+      currentFunc = {
+        node: null,
+        returns: []
+      };
+    },
+
+    getCurrentFunc: function () {
+      return currentFunc;
+    },
+
+    enterFunc: function (node) {
+      currentFunc.node = node;
+    },
+
+    exitFunc: function () {
+      currentFunc = {
+        node: null,
+        returns: []
+      };
+    },
+
+    funcAddReturn: function (node) {
+      current.returns.push(node);
+    },
+
+    getSignature: function (node) {
+      var result = node.type + '__' + node.id.name + '__';
+      for (var i=0, l=node.params.length; i<l; i++) {
+        result += node.params[i].type + '_';
+      }
+      result += 'fn';
+      return result;
+    },
+
+    getParams: function (params) {
+      var result = [];
+      for (var i=0,l=params.length;i<l;i++) {
+        var pr = params[i];
+        result.push({ type: pr.type, name: pr.id.name });
+      }
+      return result;
+    },
+
+    findFunc: function (node) {
+      var signature = api.getSignature(node);
+      if (table.hasOwnProperty(signature)) {
+        return table[signature];
+      }
+      return null;
+    },
+
+    addFunc: function (node) {
+      var signature = api.getSignature(node);
+      var name = node.id.name;
+      var type = node.type;
+      var params = api.getParams(node.params);
+      var initLine = node.location.start.line;
+      var doc = (node.doc) ? node.doc.body : "";
+
+      table[signature] = {
+        name: name,
+        type: type,
+        params: params,
+        initLine: initLine,
+        doc: doc
+      };
+    }
+  }
+  // :: EXPORT
+  return api;
+
+})();
+
+},{}],6:[function(require,module,exports){
+module.exports = (function () {
+  // :: SYMBOL TABLE
+  'use strict';
+
+  var initialScope = require('../../common/DEFAULT_CONSTANTS');
+
+  var scopePointer = 1;
+  var table = {
+    sc0: initialScope,
+    sc1: {}
+  };
+  var currentScope = table['sc' + scopePointer];
+
+  var api = {
+
+    setInitialScope: function (scope) {
+      initialScope = scope;
+      api.reset();
+    },
+
+    getTable: function() {
+      return table;
+    },
+
+    reset: function () {
+      scopePointer = 1;
+      table = {
+        sc0: initialScope,
+        sc1: {}
+      };
+      currentScope = table['sc' + scopePointer];
+    },
+
+    enterScope: function () {
+      scopePointer += 1;
+      table['sc' + scopePointer] = {};
+      currentScope = table['sc' + scopePointer];
+    },
+
+    exitScope: function () {
+      if (scopePointer > 1) {
+        table['sc' + scopePointer] = null;
+      }
+      scopePointer -= 1;
+      currentScope = table['sc' + scopePointer];
+    },
+
+    getScope: function (num) {
+      var scNum = (typeof num !== 'udefined') ? num : scopePointer;
+      return table['sc' + scNum];
+    },
+
+    findSymbol: function (name) {
+      for (var i = scopePointer; i >= 0; i--) {
+        var tempScope = api.getScope(i);
+        if (tempScope.hasOwnProperty(name)) {
+          return tempScope[name];
+        }
+      }
+      return null;
+    },
+
+    addSymbol: function (symbol, it) {
+      var init = it || symbol.init;
+      var name = symbol.id.name;
+      var value = init.value;
+      var type = init.type;
+      var initLine = symbol.location.start.line;
+
+      currentScope[name] = {
+        name: name,
+        value: value,
+        type: type,
+        initLine: initLine
+      };
+    },
+
+    checkScope: function (name) {
+      if (currentScope.hasOwnProperty(name)) {
+        return currentScope[name];
+      } else {
+        return false;
+      }
+    }  
+  }
+
+  // :: EXPORT
+  return api;
+  
+})();
+},{"../../common/DEFAULT_CONSTANTS":1}]},{},[2])
+
+
 //# sourceMappingURL=maps/evaluator.js.map

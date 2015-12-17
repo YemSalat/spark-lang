@@ -8,6 +8,14 @@ module.exports = (function () {
       '-' : 'subtract',
       '*' : 'multiply',
       '/' : 'divide'
+    },
+    typeArticle: {
+      'int'   : 'an',
+      'byte'  : 'a',
+      'long'  : 'a',
+      'float' : 'a',
+      'bool'  : 'a',
+      'str'   : 'a'
     }
   };
 
@@ -22,14 +30,15 @@ module.exports = (function () {
       already_declared    :   'variable "{0}" was already declared on line {1}'
                             },
     FUNCTION_DECLARATION  : {
-      already_exists      :   'function "{0}" was already declared on line {1}'
+      already_exists      :   'function "{0}" was already declared on line {1}',
+      must_return         :   'function "{0}" must return {typeArticle: 1} "{1}"'
                             },
     PARAM_DECLARATOR      : {
       duplicate_param     :   'duplicate parameter "{0}"'
                             },
     RETURN_STATEMENT      : {
       return_outside      :   'return statement outside function declaration',
-      type_mismatch       :   'return statement type does not match function "{0}"'
+      type_mismatch       :   'return statement type does not match function "{0}" of type "{1}"'
                             },
     IDENTIFIER            : {
       does_not_exist      :   'variable "{0}" does not exist'

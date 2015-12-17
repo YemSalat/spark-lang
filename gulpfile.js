@@ -31,8 +31,8 @@ gulp.task('evaluator', function () {
 	.pipe(buffer())
 	.pipe(sourcemaps.init({loadMaps: true}))
 		// Add transformation tasks to the pipeline here.
-		.pipe(uglify())
-		.on('error', gutil.log)
+		// .pipe(uglify())
+		// .on('error', gutil.log)
 	.pipe(sourcemaps.write('./maps/'))
 	.pipe(gulp.dest('./build/'));
 });
@@ -49,8 +49,8 @@ gulp.task('generator', function () {
 	.pipe(buffer())
 	.pipe(sourcemaps.init({loadMaps: true}))
 		// Add transformation tasks to the pipeline here.
-		.pipe(uglify())
-		.on('error', gutil.log)
+		// .pipe(uglify())
+		// .on('error', gutil.log)
 	.pipe(sourcemaps.write('./maps/'))
 	.pipe(gulp.dest('./build/'));
 });

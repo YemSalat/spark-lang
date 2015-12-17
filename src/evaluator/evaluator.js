@@ -91,9 +91,12 @@ module.exports = (function() {
         }
         else {
           // add new variable to current scope
-          var cVal = '{expression}';
-          if (item.init['$$'] === 'LITERAL') {
-            cVal = item.init.value;
+          var cVal = '{null}';
+          if (item.init) {
+            cVal = '{expression}';
+            if (item.init['$$'] === 'LITERAL') {
+              cVal = item.init.value;
+            }
           }
           symbolTable.addSymbol(item, { value: cVal, type: node.type });
         }
@@ -128,6 +131,12 @@ module.exports = (function() {
       funcTable.enterFunc(node);
       // parse function body
       node.body = __evalNode(node.body);
+      // evaluate return statemnts
+      var curFunc = funcTable.getCurrentFunc();
+      var returnAmount = curFunc.returns.length;
+      if (node.type !== 'void' && returnAmount === 0) {
+        return errorManager.logError(node, node.location, 'must_return', [node.id.name, node.type]);
+      }
       // exit function
       funcTable.exitFunc();
       // exit scope
@@ -141,17 +150,20 @@ module.exports = (function() {
     RETURN_STATEMENT: function (node) {
       node.argument = __evalNode(node.argument);
       // set return statement type
-      node.type = node.argument.type;
+      node.type = (node.argument) ? node.argument.type : 'void';
 
       // check type matches current function
-      var curFunc = getCurrentFunc();
+      var curFunc = funcTable.getCurrentFunc();
       if (!curFunc.node) {
         return errorManager.logError(node, node.location, 'return_outside');
       }
-      var cType = util.typeCheck(node.type, curFunc.type);
+      var cType = util.typeCheck(node.type, curFunc.node.type);
       if (!cType) {
-        return errorManager.logError(node, node.location, 'type_mismatch', [curFunc.node.id.name]);
+        return errorManager.logError(node, node.location, 'type_mismatch', [curFunc.node.id.name, curFunc.node.type]);
       }
+
+      // add return
+      funcTable.funcAddReturn(node);
 
       return node;
     },
