@@ -677,7 +677,8 @@ module.exports = (function () {
         type: type,
         params: params,
         initLine: initLine,
-        doc: doc
+        doc: doc,
+        node: node
       };
     }
   }
