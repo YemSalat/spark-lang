@@ -145,18 +145,18 @@ var report2Markdown = function (report) {
 		parseTestSuite: function (node) {
 			var result = '';
 			var cNode = node['$'];
+			var cName = cNode.name;
 
 			if (node.testcase) {
 
-				var cName = cNode.name;
 				if (currentName !== '') {
 					var cRegex = cName.match(new RegExp('^'+ quote(currentName) +'\\.'));
 					if (cRegex !== null) {
-						cName = cName.replace()
+						cName = cName.replace(cRegex, '')
 					}
 				}
 
-				result += '**' + cNode.name + '**\n';
+				result += '**' + cName + '**\n';
 
 
 				++indentLevel; // INCRESE indent
@@ -168,7 +168,8 @@ var report2Markdown = function (report) {
 				currentName = '';
 			}
 			else {
-				result += '##' + cNode.name + '';
+				currentName = cName;
+				result += '##' + cName + '';
 			}
 
 			result += '\n\n';

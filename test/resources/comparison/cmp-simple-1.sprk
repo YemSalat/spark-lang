@@ -73,3 +73,27 @@ for (char i = 0 ; i < 25 ; i++ ) {
 char z = 32 - b;
 
 % ===================== %
+
+/// multiply two numbers
+int multiply (int a, int b) {
+  return a * b
+}
+
+/// multiply number by two
+int multiply (int a) {
+  return a * 2;
+}
+
+% ----------- %
+
+//  multiply two numbers
+int multiply ( int a, int b )  {
+  return a * b;
+}
+
+//  multiply number by two
+int multiply ( int a )  {
+  return a * 2;
+}
+
+% ===================== %
