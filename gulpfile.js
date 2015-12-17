@@ -193,8 +193,12 @@ var reportConverter = report2Markdown();
 gulp.task('test', ['evaluator', 'generator'], function () {
 	exec('cd test && ../node_modules/jasmine-node/bin/jasmine-node --verbose --junitreport --color spec', function (err, out, code) {
 		if (err instanceof Error) {
-			return console.log(err);
+			console.log(err);
+
+			return code;
 		}
+
+		console.log(out);
 
 		var parser = new xml2js.Parser();
 
