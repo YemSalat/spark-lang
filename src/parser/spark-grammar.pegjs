@@ -1099,9 +1099,13 @@ FormalParameterDeclarationList
     }
 
 ParameterDeclaration
-  = head:VariableType _nbws_ tail:Identifier {
-    return { location: getLocation(), $$: "PARAM_DECLARATOR", type: head, id: tail };
+  = head:VariableType _nbws_ tail:Identifier _nbws_ "=" _nbws_ def:Literal {
+    return { location: getLocation(), $$: "PARAM_DECLARATOR", type: head, id: tail, default: def };
   }
+  / head:VariableType _nbws_ tail:Identifier {
+    return { location: getLocation(), $$: "PARAM_DECLARATOR", type: head, id: tail, default: null };
+  }
+
 
 FormalParameterList
   = head:Identifier tail:(__ "," __ Identifier)* {

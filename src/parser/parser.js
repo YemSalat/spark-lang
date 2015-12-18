@@ -650,17 +650,20 @@ global.SparkParser = module.exports = (function() {
                 type:   type
               };
             },
-        peg$c348 = function(head, tail) {
-            return { location: getLocation(), $$: "PARAM_DECLARATOR", type: head, id: tail };
+        peg$c348 = function(head, tail, def) {
+            return { location: getLocation(), $$: "PARAM_DECLARATOR", type: head, id: tail, default: def };
           },
-        peg$c349 = function(body) {
+        peg$c349 = function(head, tail) {
+            return { location: getLocation(), $$: "PARAM_DECLARATOR", type: head, id: tail, default: null };
+          },
+        peg$c350 = function(body) {
               return {
                 location: getLocation(),
                 $$: "BLOCK_STATEMENT",
                 body: optionalList(body)
               };
             },
-        peg$c350 = function(body) {
+        peg$c351 = function(body) {
               // console.log(body);
               return {
                 location: getLocation(),
@@ -668,7 +671,7 @@ global.SparkParser = module.exports = (function() {
                 body: optionalList(body)
               };
             },
-        peg$c351 = function(head, tail) {
+        peg$c352 = function(head, tail) {
               return buildList(head, tail, 1);
             },
 
@@ -11154,7 +11157,7 @@ global.SparkParser = module.exports = (function() {
     }
 
     function peg$parseParameterDeclaration() {
-      var s0, s1, s2, s3;
+      var s0, s1, s2, s3, s4, s5, s6, s7;
 
       var key    = peg$currPos * 159 + 153,
           cached = peg$resultsCache[key];
@@ -11172,9 +11175,39 @@ global.SparkParser = module.exports = (function() {
         if (s2 !== peg$FAILED) {
           s3 = peg$parseIdentifier();
           if (s3 !== peg$FAILED) {
-            peg$savedPos = s0;
-            s1 = peg$c348(s1, s3);
-            s0 = s1;
+            s4 = peg$parse_nbws_();
+            if (s4 !== peg$FAILED) {
+              if (input.charCodeAt(peg$currPos) === 61) {
+                s5 = peg$c230;
+                peg$currPos++;
+              } else {
+                s5 = peg$FAILED;
+                if (peg$silentFails === 0) { peg$fail(peg$c231); }
+              }
+              if (s5 !== peg$FAILED) {
+                s6 = peg$parse_nbws_();
+                if (s6 !== peg$FAILED) {
+                  s7 = peg$parseLiteral();
+                  if (s7 !== peg$FAILED) {
+                    peg$savedPos = s0;
+                    s1 = peg$c348(s1, s3, s7);
+                    s0 = s1;
+                  } else {
+                    peg$currPos = s0;
+                    s0 = peg$FAILED;
+                  }
+                } else {
+                  peg$currPos = s0;
+                  s0 = peg$FAILED;
+                }
+              } else {
+                peg$currPos = s0;
+                s0 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
           } else {
             peg$currPos = s0;
             s0 = peg$FAILED;
@@ -11186,6 +11219,30 @@ global.SparkParser = module.exports = (function() {
       } else {
         peg$currPos = s0;
         s0 = peg$FAILED;
+      }
+      if (s0 === peg$FAILED) {
+        s0 = peg$currPos;
+        s1 = peg$parseVariableType();
+        if (s1 !== peg$FAILED) {
+          s2 = peg$parse_nbws_();
+          if (s2 !== peg$FAILED) {
+            s3 = peg$parseIdentifier();
+            if (s3 !== peg$FAILED) {
+              peg$savedPos = s0;
+              s1 = peg$c349(s1, s3);
+              s0 = s1;
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
       }
 
       peg$resultsCache[key] = { nextPos: peg$currPos, result: s0 };
@@ -11315,7 +11372,7 @@ global.SparkParser = module.exports = (function() {
       }
       if (s1 !== peg$FAILED) {
         peg$savedPos = s0;
-        s1 = peg$c349(s1);
+        s1 = peg$c350(s1);
       }
       s0 = s1;
 
@@ -11343,7 +11400,7 @@ global.SparkParser = module.exports = (function() {
       }
       if (s1 !== peg$FAILED) {
         peg$savedPos = s0;
-        s1 = peg$c350(s1);
+        s1 = peg$c351(s1);
       }
       s0 = s1;
 
@@ -11403,7 +11460,7 @@ global.SparkParser = module.exports = (function() {
         }
         if (s2 !== peg$FAILED) {
           peg$savedPos = s0;
-          s1 = peg$c351(s1, s2);
+          s1 = peg$c352(s1, s2);
           s0 = s1;
         } else {
           peg$currPos = s0;
