@@ -41,6 +41,10 @@ module.exports = (function () {
     },
 
     getSignature: function (node) {
+      var params = node.params;
+      if (node['$$'] === 'CALL_STATEMENT') {
+        params = node.arguments;
+      } 
       var result = node.type + '__' + node.id.name + '__';
       for (var i=0, l=node.params.length; i<l; i++) {
         result += node.params[i].type + '_';
@@ -53,15 +57,26 @@ module.exports = (function () {
       var result = [];
       for (var i=0,l=params.length;i<l;i++) {
         var pr = params[i];
-        result.push({ type: pr.type, name: pr.id.name });
+        result.push({
+          type: pr.type,
+          name: pr.id.name,
+          default: pr.default
+        });
       }
       return result;
     },
 
     findFunc: function (node) {
+      var name = node.id.name;
       var signature = api.getSignature(node);
-      if (table.hasOwnProperty(signature)) {
-        return table[signature];
+      if (table.hasOwnProperty(name)) {
+        var tableFunc = table[name];
+        for (var i=0, l=tableFunc.length; i<l; i++) {
+          var cFunc = tableFunc[i];
+          if (cFunc.signature === signature) {
+            return cFunc; 
+          }
+        }
       }
       return null;
     },
@@ -74,14 +89,22 @@ module.exports = (function () {
       var initLine = node.location.start.line;
       var doc = (node.doc) ? node.doc.body : "";
 
-      table[signature] = {
-        name: name,
+      if (! table[name] ) {
+        table[name] = [];
+      }
+
+      var func = {
+        signature: signature,
         type: type,
         params: params,
         initLine: initLine,
         doc: doc,
         node: node
       };
+
+      table[name].push(func);
+
+      return func;
     }
   }
   // :: EXPORT
