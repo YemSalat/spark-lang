@@ -131,8 +131,17 @@ module.exports = (function() {
 
       // eval params
       if (node.params) {
+        var defaultParamReached = false;
         for (var i=0,l=node.params.length; i<l; i++) {
           var item = __evalNode(node.params[i]);
+          // make sure that params with defaults are at the end
+          if (item.default) {
+            defaultParamReached = true;
+          }
+          else if (defaultParamReached) {
+            // incorrect syntax for default params
+            return errorManager.logError(node, item.location, 'incorrect_params', [node.id.name, node.type]);
+          }
           symbolTable.addSymbol(item, { value: null, type: item.type });
         }
       }
@@ -155,6 +164,14 @@ module.exports = (function() {
       return node;
     },
     PARAM_DECLARATOR: function (node) {
+      // check default value
+      if (node.default) {
+        node.default = __evalNode(node.default);
+        var cType = util.typeCheck(node.type, node.default.type, true);
+        if (!cType) {
+          return errorManager.logError(node, node.location, 'type_mismatch', [node.id.name, node.type]);
+        }
+      }
       return node;
     },
     RETURN_STATEMENT: function (node) {

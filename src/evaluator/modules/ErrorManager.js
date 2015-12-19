@@ -31,10 +31,12 @@ module.exports = (function () {
                             },
     FUNCTION_DECLARATION  : {
       already_exists      :   'function "{0}" was already declared on line {1}',
-      must_return         :   'function "{0}" must return {typeArticle: 1} "{1}"'
+      must_return         :   'function "{0}" must return {typeArticle: 1} "{1}"',
+      incorrect_params    :   'parameters with default values must be declared last'
                             },
     PARAM_DECLARATOR      : {
-      duplicate_param     :   'duplicate parameter "{0}"'
+      duplicate_param     :   'duplicate parameter "{0}"',
+      type_mismatch       :   'default value for parameter "{0}" must be {typeArticle: 1} "{1}"'
                             },
     RETURN_STATEMENT      : {
       return_outside      :   'return statement outside function declaration',

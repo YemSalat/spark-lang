@@ -10,6 +10,6 @@
 
 
 **Test code generated from files.Compare output for /var-declarations/or/-alt.sprk**
-- Checks if implicit and explicit scopes are identical - *21ms* 
+- Checks if implicit and explicit scopes are identical - *26ms* 
 
 

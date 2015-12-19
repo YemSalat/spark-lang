@@ -46,8 +46,17 @@ module.exports = (function () {
         params = node.arguments;
       } 
       var result = node.type + '__' + node.id.name + '__';
+      var reachedDefaultParam = false;
       for (var i=0, l=params.length; i<l; i++) {
-        result += params[i].type + '_';
+        var cParam = params[i];
+        if ( !reachedDefaultParam && cParam.default) {
+          result += '|'; // separate default params with pipes
+          reachedDefaultParam = true;
+        }
+        result += cParam.type + '_';
+      }
+      if (reachedDefaultParam) {
+        result += '|';
       }
       result += 'fn';
       return result;
@@ -75,6 +84,9 @@ module.exports = (function () {
           var cFunc = tableFunc[i];
           if (cFunc.signature === signature) {
             return cFunc; 
+          }
+          else if (cFunc.signature.replace(/\|[a-z_]+\|/, '') === signature) {
+            return cFunc;
           }
         }
       }

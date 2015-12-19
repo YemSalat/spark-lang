@@ -30,6 +30,41 @@ gulp.task('evaluator', function () {
 	.pipe(source('evaluator.js'))
 	.pipe(buffer())
 	.pipe(sourcemaps.init({loadMaps: true}))
+		.pipe(uglify())
+		.on('error', gutil.log)
+	.pipe(sourcemaps.write('./maps/'))
+	.pipe(gulp.dest('./build/'));
+});
+
+gulp.task('generator', function () {
+	// set up the browserify instance on a task basis
+	var b = browserify({
+		entries: './src/generator/generator.js',
+		debug: true
+	});
+
+	return b.bundle()
+	.pipe(source('generator.js'))
+	.pipe(buffer())
+	.pipe(sourcemaps.init({loadMaps: true}))
+		.pipe(uglify())
+		.on('error', gutil.log)
+	.pipe(sourcemaps.write('./maps/'))
+	.pipe(gulp.dest('./build/'));
+});
+
+
+gulp.task('evaluator_nomin', function () {
+	// set up the browserify instance on a task basis
+	var b = browserify({
+		entries: './src/evaluator/evaluator.js',
+		debug: true
+	});
+
+	return b.bundle()
+	.pipe(source('evaluator.js'))
+	.pipe(buffer())
+	.pipe(sourcemaps.init({loadMaps: true}))
 		// Add transformation tasks to the pipeline here.
 		// .pipe(uglify())
 		// .on('error', gutil.log)
@@ -37,7 +72,7 @@ gulp.task('evaluator', function () {
 	.pipe(gulp.dest('./build/'));
 });
 
-gulp.task('generator', function () {
+gulp.task('generator_nomin', function () {
 	// set up the browserify instance on a task basis
 	var b = browserify({
 		entries: './src/generator/generator.js',
@@ -54,7 +89,6 @@ gulp.task('generator', function () {
 	.pipe(sourcemaps.write('./maps/'))
 	.pipe(gulp.dest('./build/'));
 });
-
 
 gulp.task('parser', function () {
 
@@ -119,6 +153,14 @@ gulp.task('default', ['evaluator', 'generator'], function () {
 });
 
 gulp.task('build', ['parser', 'evaluator', 'generator'], function () {
+
+});
+
+gulp.task('build_nomin', ['evaluator_nomin', 'generator_nomin'], function () {
+
+});
+
+gulp.task('build_nomin_all', ['parser', 'evaluator_nomin', 'generator_nomin'], function () {
 
 });
 

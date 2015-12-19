@@ -28,7 +28,10 @@ module.exports = (function () {
 
       return node;
     },
-    typeCheck: function (leftType, rightType) {
+    typeCheck: function (leftType, rightType, strict) {
+      if (strict) {
+        return leftType === rightType;
+      }
       if (!leftType || !rightType) {
         return false;
       }
