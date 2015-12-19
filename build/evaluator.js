@@ -61,6 +61,7 @@ module.exports = (function() {
     if (mType) {
       pNode = evaluate[mType](node)
       if (pNode.error) {
+        console.log(JSON.stringify( pNode ));
         throw new SemanticError('SemanticError', pNode.error.message, pNode.error.location);
       }
     }
@@ -149,7 +150,7 @@ module.exports = (function() {
       var cFunc = funcTable.findFunc(node);
       if (cFunc) {
         // error
-        return errorManager.logError(node, node.location, 'already_exists', [cFunc.name, cFunc.initLine]);
+        return errorManager.logError(node, node.location, 'already_exists', [node.id.name, cFunc.initLine]);
       }
 
       // check duplicate params
@@ -641,9 +642,13 @@ module.exports = (function () {
     },
 
     getSignature: function (node) {
+      var params = node.params;
+      if (node['$$'] === 'CALL_STATEMENT') {
+        params = node.arguments;
+      } 
       var result = node.type + '__' + node.id.name + '__';
-      for (var i=0, l=node.params.length; i<l; i++) {
-        result += node.params[i].type + '_';
+      for (var i=0, l=params.length; i<l; i++) {
+        result += params[i].type + '_';
       }
       result += 'fn';
       return result;
@@ -653,7 +658,11 @@ module.exports = (function () {
       var result = [];
       for (var i=0,l=params.length;i<l;i++) {
         var pr = params[i];
-        result.push({ type: pr.type, name: pr.id.name });
+        result.push({
+          type: pr.type,
+          name: pr.id.name,
+          default: pr.default
+        });
       }
       return result;
     },

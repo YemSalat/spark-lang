@@ -26,6 +26,7 @@ module.exports = (function() {
     if (mType) {
       pNode = evaluate[mType](node)
       if (pNode.error) {
+        console.log(JSON.stringify( pNode ));
         throw new SemanticError('SemanticError', pNode.error.message, pNode.error.location);
       }
     }
@@ -114,7 +115,7 @@ module.exports = (function() {
       var cFunc = funcTable.findFunc(node);
       if (cFunc) {
         // error
-        return errorManager.logError(node, node.location, 'already_exists', [cFunc.name, cFunc.initLine]);
+        return errorManager.logError(node, node.location, 'already_exists', [node.id.name, cFunc.initLine]);
       }
 
       // check duplicate params

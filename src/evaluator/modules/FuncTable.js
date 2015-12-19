@@ -46,8 +46,8 @@ module.exports = (function () {
         params = node.arguments;
       } 
       var result = node.type + '__' + node.id.name + '__';
-      for (var i=0, l=node.params.length; i<l; i++) {
-        result += node.params[i].type + '_';
+      for (var i=0, l=params.length; i<l; i++) {
+        result += params[i].type + '_';
       }
       result += 'fn';
       return result;
