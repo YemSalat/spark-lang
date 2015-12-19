@@ -233,7 +233,7 @@ var report2Markdown = function (report) {
 
 var reportConverter = report2Markdown();
 
-gulp.task('test', ['evaluator', 'generator'], function () {
+gulp.task('test', function () {
 	exec('cd test && ../node_modules/jasmine-node/bin/jasmine-node --verbose --junitreport --color spec', function (err, out, code) {
 		if (err instanceof Error) {
 			console.log(err);

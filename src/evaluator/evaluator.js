@@ -167,7 +167,7 @@ module.exports = (function() {
       // check default value
       if (node.default) {
         node.default = __evalNode(node.default);
-        var cType = util.typeCheck(node.type, node.default.type, true);
+        var cType = util.typeCheck(node.type, node.default.type, false);
         if (!cType) {
           return errorManager.logError(node, node.location, 'type_mismatch', [node.id.name, node.type]);
         }
@@ -195,7 +195,13 @@ module.exports = (function() {
       return node;
     },
     CALL_STATEMENT: function (node) {
-      node.type = 'int';
+      // check if function exists
+      var cFunc = funcTable.findFunc(node);
+      if (!cFunc) {
+        return errorManager.logError(node, node.location, 'does_not_exist', [node.callee.name]);
+      }
+      // assign call statement type
+      node.type = cFunc.type;
       return node;
     },
 

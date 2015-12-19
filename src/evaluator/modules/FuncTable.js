@@ -41,22 +41,23 @@ module.exports = (function () {
     },
 
     getSignature: function (node) {
+      var cId = node.id || node.callee;
       var params = node.params;
       if (node['$$'] === 'CALL_STATEMENT') {
         params = node.arguments;
       } 
-      var result = node.type + '__' + node.id.name + '__';
+      var result = cId.name + '__';
       var reachedDefaultParam = false;
       for (var i=0, l=params.length; i<l; i++) {
         var cParam = params[i];
         if ( !reachedDefaultParam && cParam.default) {
-          result += '|'; // separate default params with pipes
+          result += '['; // separate default params with pipes
           reachedDefaultParam = true;
         }
         result += cParam.type + '_';
       }
       if (reachedDefaultParam) {
-        result += '|';
+        result += ']';
       }
       result += 'fn';
       return result;
@@ -76,7 +77,8 @@ module.exports = (function () {
     },
 
     findFunc: function (node) {
-      var name = node.id.name;
+      var cId = node.id || node.callee;
+      var name = cId.name;
       var signature = api.getSignature(node);
       if (table.hasOwnProperty(name)) {
         var tableFunc = table[name];
@@ -85,7 +87,7 @@ module.exports = (function () {
           if (cFunc.signature === signature) {
             return cFunc; 
           }
-          else if (cFunc.signature.replace(/\|[a-z_]+\|/, '') === signature) {
+          else if (cFunc.signature.replace(/\[[a-z_]+\]/, '') === signature) {
             return cFunc;
           }
         }

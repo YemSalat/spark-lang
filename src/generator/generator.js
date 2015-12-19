@@ -136,11 +136,17 @@ module.exports = (function() {
         useWatcher.add(fName);
       }
 
-      result += '( ';
+      result += '(';
       var args = [];
       for (var i=0, l=node['arguments'].length; i<l; i++) {
+        if (i === 0) {
+          result += ' ';
+        }
         var curArg = node['arguments'][i];
         args.push(__generateNode(curArg));
+        if (i === l) {
+          result += ' ';
+        }
       }
       result += args.join(', ');
 

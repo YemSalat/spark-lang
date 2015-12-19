@@ -34,6 +34,9 @@ module.exports = (function () {
       must_return         :   'function "{0}" must return {typeArticle: 1} "{1}"',
       incorrect_params    :   'parameters with default values must be declared last'
                             },
+    CALL_STATEMENT        : {
+      does_not_exist      :   'function "{0}" does not exist'
+                            },
     PARAM_DECLARATOR      : {
       duplicate_param     :   'duplicate parameter "{0}"',
       type_mismatch       :   'default value for parameter "{0}" must be {typeArticle: 1} "{1}"'
