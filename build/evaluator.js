@@ -3,30 +3,32 @@ module.exports = (function () {
   // :: CONSTANTS
   'use strict';
   
-  var DEFAULT_CONSTANTS = {
-    LOW: {
-      name: 'LOW',
-      type: 'int',
-      value: 0
-    },
-    HIGH: {
-      name: 'HIGH',
-      type: 'int',
-      value: 1
-    },
-    READ: {
-      name: 'READ',
-      type: 'int',
-      value: 0
-    },
-    WRITE: {
-      name: 'WRITE',
-      type: 'int',
-      value: 1
+  var api = {
+    DEFAULT_CONSTANTS: {
+      LOW: {
+        name: 'LOW',
+        type: 'int',
+        value: 0
+      },
+      HIGH: {
+        name: 'HIGH',
+        type: 'int',
+        value: 1
+      },
+      READ: {
+        name: 'READ',
+        type: 'int',
+        value: 0
+      },
+      WRITE: {
+        name: 'WRITE',
+        type: 'int',
+        value: 1
+      }
     }
   };
 
-  return DEFAULT_CONSTANTS;
+  return api;
 
 })();
 },{}],2:[function(require,module,exports){
@@ -41,7 +43,7 @@ module.exports = (function() {
   var util = require('./modules/EvaluatorUtil');
   
   // :: CONSTANTS
-  var DEFAULT_CONSTANTS = require('./../common/DEFAULT_CONSTANTS');
+  var DEFAULT_CONSTANTS = require('./../common/constants').DEFAULT_CONSTANTS;
 
   // :: ERRORS
   function SemanticError (name, message, location) {
@@ -386,7 +388,7 @@ module.exports = (function() {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./../common/DEFAULT_CONSTANTS":1,"./modules/ErrorManager":3,"./modules/EvaluatorUtil":4,"./modules/FuncTable":5,"./modules/SymbolTable":6}],3:[function(require,module,exports){
+},{"./../common/constants":1,"./modules/ErrorManager":3,"./modules/EvaluatorUtil":4,"./modules/FuncTable":5,"./modules/SymbolTable":6}],3:[function(require,module,exports){
 module.exports = (function () {
   // :: ERROR MANAGER
   'use strict';
@@ -692,7 +694,7 @@ module.exports = (function () {
   // :: SYMBOL TABLE
   'use strict';
 
-  var initialScope = require('../../common/DEFAULT_CONSTANTS');
+  var initialScope = require('../../common/constants').DEFAULT_CONSTANTS;
 
   var scopePointer = 1;
   var table = {
@@ -778,7 +780,7 @@ module.exports = (function () {
   return api;
   
 })();
-},{"../../common/DEFAULT_CONSTANTS":1}]},{},[2])
+},{"../../common/constants":1}]},{},[2])
 
 
 //# sourceMappingURL=maps/evaluator.js.map

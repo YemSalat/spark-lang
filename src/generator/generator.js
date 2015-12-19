@@ -7,7 +7,7 @@ module.exports = (function() {
   var util = require('./modules/GeneratorUtil');
 
   // :: CONSTANTS
-  var DEFAULT_FUNCTIONS = require('./../common/DEFAULT_FUNCTIONS');
+  var DEFAULT_FUNCTIONS = require('./../common/functions').DEFAULT_FUNCTIONS;
 
   // :: OP
   var __generateNode = function (node, method) {

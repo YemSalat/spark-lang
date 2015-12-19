@@ -3,16 +3,18 @@ module.exports = (function () {
   // :: CONSTANTS
   'use strict';
   
-  var DEFAULT_FUNCTIONS = {
-    millis: 'millis',
-    pinRead: 'digitalRead',
-    pinWrite: 'digitalWrite',
-    pinMode: 'pinMode',
-    print: 'Serial.print',
-    printn: 'Serial.println'
-  };
+  var api = {
+      DEFAULT_FUNCTIONS: {
+      millis: 'millis',
+      pinRead: 'digitalRead',
+      pinWrite: 'digitalWrite',
+      pinMode: 'pinMode',
+      print: 'Serial.print',
+      printn: 'Serial.println'
+    }
+  }
 
-  return DEFAULT_FUNCTIONS;
+  return api;
 
 })();
 },{}],2:[function(require,module,exports){
@@ -26,7 +28,7 @@ module.exports = (function() {
   var util = require('./modules/GeneratorUtil');
 
   // :: CONSTANTS
-  var DEFAULT_FUNCTIONS = require('./../common/DEFAULT_FUNCTIONS');
+  var DEFAULT_FUNCTIONS = require('./../common/functions').DEFAULT_FUNCTIONS;
 
   // :: OP
   var __generateNode = function (node, method) {
@@ -309,7 +311,7 @@ module.exports = (function() {
 })();
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./../common/DEFAULT_FUNCTIONS":1,"./modules/GeneratorUtil":3,"./modules/IndentManager":4,"./modules/UseWatcher":5}],3:[function(require,module,exports){
+},{"./../common/functions":1,"./modules/GeneratorUtil":3,"./modules/IndentManager":4,"./modules/UseWatcher":5}],3:[function(require,module,exports){
 module.exports = (function () {
   // :: UTIL
   'use strict';
