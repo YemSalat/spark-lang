@@ -32,7 +32,8 @@ module.exports = (function () {
     FUNCTION_DECLARATION  : {
       already_exists      :   'function "{0}" was already declared on line {1}',
       must_return         :   'function "{0}" must return {typeArticle: 1} "{1}"',
-      incorrect_params    :   'parameters with default values must be declared last'
+      incorrect_params    :   'parameters with default values must be declared last',
+      cant_redeclare      :   'can\'t re-declare built-in function "{0}"'
                             },
     CALL_STATEMENT        : {
       does_not_exist      :   'function "{0}" does not exist'

@@ -9,6 +9,7 @@ module.exports = (function() {
   
   // :: CONSTANTS
   var DEFAULT_CONSTANTS = require('./../common/constants').DEFAULT_CONSTANTS;
+  var DEFAULT_FUNCTIONS = require('./../common/functions').DEFAULT_FUNCTIONS;
 
   // :: ERRORS
   function SemanticError (name, message, location) {
@@ -112,10 +113,16 @@ module.exports = (function() {
 
 
     FUNCTION_DECLARATION: function (node) {
+      var cName = node.id.name;
+      // dont eval built-in functions
+      if (DEFAULT_FUNCTIONS.hasOwnProperty(cName)) {
+        return errorManager.logError(node, node.location, 'cant_redeclare', [cName]);
+      }
+
       var cFunc = funcTable.findFunc(node);
       if (cFunc) {
         // error
-        return errorManager.logError(node, node.location, 'already_exists', [node.id.name, cFunc.initLine]);
+        return errorManager.logError(node, node.location, 'already_exists', [cName, cFunc.initLine]);
       }
 
       // check duplicate params
@@ -140,7 +147,7 @@ module.exports = (function() {
           }
           else if (defaultParamReached) {
             // incorrect syntax for default params
-            return errorManager.logError(node, item.location, 'incorrect_params', [node.id.name, node.type]);
+            return errorManager.logError(node, item.location, 'incorrect_params', [cName, node.type]);
           }
           symbolTable.addSymbol(item, { value: null, type: item.type });
         }
@@ -154,7 +161,7 @@ module.exports = (function() {
       var curFunc = funcTable.getCurrentFunc();
       var returnAmount = curFunc.returns.length;
       if (node.type !== 'void' && returnAmount === 0) {
-        return errorManager.logError(node, node.location, 'must_return', [node.id.name, node.type]);
+        return errorManager.logError(node, node.id.location, 'must_return', [cName, node.type]);
       }
       // exit function
       funcTable.exitFunc();
@@ -186,7 +193,8 @@ module.exports = (function() {
       }
       var cType = util.typeCheck(node.type, curFunc.node.type);
       if (!cType) {
-        return errorManager.logError(node, node.location, 'type_mismatch', [curFunc.node.id.name, curFunc.node.type]);
+        var errLocation = ( node.argument ) ? node.argument.location : node.location;
+        return errorManager.logError(node, errLocation, 'type_mismatch', [curFunc.node.id.name, curFunc.node.type]);
       }
 
       // add return
@@ -195,10 +203,26 @@ module.exports = (function() {
       return node;
     },
     CALL_STATEMENT: function (node) {
+      var cName = node.callee.name;
+      // eval arguments
+      for (var i=0, l=node.arguments.length; i<l; i++) {
+        var cArg = node.arguments[i] = __evalNode(node.arguments[i]);
+      }
+      // dont eval built-in functions
+      if (DEFAULT_FUNCTIONS.hasOwnProperty(cName)) {
+        return node;
+      }
       // check if function exists
       var cFunc = funcTable.findFunc(node);
       if (!cFunc) {
-        return errorManager.logError(node, node.location, 'does_not_exist', [node.callee.name]);
+        return errorManager.logError(node, node.callee.location, 'does_not_exist', [cName]);
+      }
+      // add missing default params
+      if (funcTable.funcHasDefaults(cFunc) && node.arguments.length < cFunc.params.length) {
+        var defParams = cFunc.params.slice(node.arguments.length);
+        for (var i=0, l=defParams.length; i<l; i++) {
+          node.arguments.push(__evalNode(defParams[i].default));
+        }
       }
       // assign call statement type
       node.type = cFunc.type;

@@ -7,6 +7,12 @@ module.exports = (function () {
     node: null,
     returns: []
   };
+
+  // @TODO: REFACTOR!  
+  var numberTypes = ['byte', 'int', 'long', 'float'];
+  var isNumber = function (type) {
+    return numberTypes.indexOf(type) > -1;
+  }
   
   var api = {
     getTable: function () {
@@ -48,18 +54,16 @@ module.exports = (function () {
       } 
       var result = cId.name + '__';
       var reachedDefaultParam = false;
+      var paramTypes = [];
       for (var i=0, l=params.length; i<l; i++) {
         var cParam = params[i];
         if ( !reachedDefaultParam && cParam.default) {
-          result += '['; // separate default params with pipes
+          result += '|'; // separate default params with pipes
           reachedDefaultParam = true;
         }
-        result += cParam.type + '_';
+        var paramType = isNumber(cParam.type) ? 'num' : cParam.type;
+        result += paramType + '_';
       }
-      if (reachedDefaultParam) {
-        result += ']';
-      }
-      result += 'fn';
       return result;
     },
 
@@ -76,6 +80,10 @@ module.exports = (function () {
       return result;
     },
 
+    funcHasDefaults: function (func) {
+      return func.signature.match(/\|/) !== null;
+    },
+
     findFunc: function (node) {
       var cId = node.id || node.callee;
       var name = cId.name;
@@ -87,8 +95,20 @@ module.exports = (function () {
           if (cFunc.signature === signature) {
             return cFunc; 
           }
-          else if (cFunc.signature.replace(/\[[a-z_]+\]/, '') === signature) {
-            return cFunc;
+          else if (api.funcHasDefaults(cFunc)) {
+            // @TODO: REFACTOR!
+            var sigSplit = cFunc.signature.split('|');
+            var sigStart = sigSplit[0]; 
+            var sigRest = sigSplit[1].split('_').slice(0, -1);
+            for (var j=0, ll=sigRest.length; j<=ll; j++) {
+              var sigTmp = sigStart + sigRest.slice(0, j).join('_');
+              if (sigTmp[sigTmp.length - 1] !== '_') {
+                sigTmp += '_';
+              }
+              if (sigTmp === signature) {
+                return cFunc;
+              }
+            }
           }
         }
       }
