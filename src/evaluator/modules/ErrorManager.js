@@ -23,7 +23,8 @@ module.exports = (function () {
     VARIABLE_STATEMENT    : {
       type_mismatch       :   'variable "{0}" does not match type "{1}"',
       already_exists      :   'variable "{0}" was already initialized as \'{1}\' on line {2}',
-      does_not_exist      :   'variable "{0}" is not defined'
+      does_not_exist      :   'variable "{0}" is not defined',
+      number_doesnt_fit   :   'number of type "{0}" won\'t fit into {typeArticle: 1} "{1}"'
                             },
     VARIABLE_DECLARATOR   : {
       already_initialized :   'variable "{0}" was already initialized as {1} on line {2}',

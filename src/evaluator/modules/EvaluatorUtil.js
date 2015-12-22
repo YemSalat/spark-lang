@@ -75,6 +75,16 @@ module.exports = (function () {
     isNumber: function (type) {
       return numberTypeScale.indexOf(type) > -1;
     },
+    compareNumberTypes: function (typeA, typeB) {
+      var nA = numberTypeScale.indexOf(typeA);
+      var nB = numberTypeScale.indexOf(typeB);
+      if (nA > -1 && nB > -1) {
+        return nA - nB;
+      }
+      else {
+        return -Infinity; // something went wrong, check nA/nB
+      }
+    },
     isEqualityOperator: function (operator) {
       return equalityOperatorMap.indexOf(operator) > -1;
     },

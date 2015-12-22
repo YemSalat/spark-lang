@@ -78,6 +78,10 @@ module.exports = (function() {
             return errorManager.logError(node, node.location, 'type_mismatch', [item.id.name, varType]);
           }
           else {
+            if (util.isNumber(node.type)) {
+              if (util.compareNumberTypes(varType, item.init.type) < 0)
+                return errorManager.logError(node, node.location, 'number_doesnt_fit', [item.init.type, varType]);
+            }
             node.type = cType;
           }
           initType = cType;
