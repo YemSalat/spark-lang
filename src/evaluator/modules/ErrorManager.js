@@ -60,6 +60,9 @@ module.exports = (function () {
     ASSIGNMENT_STATEMENT  : {
       type_mismatch       :   'assignment types mismatch, can\'t assign "{0}" to "{1}"'
                             },
+    ASSIGNMENT_ACTION     : {
+      type_mismatch       :   'assignment types mismatch, can\'t assign "{0}" to "{1}"'
+                            },
     UPDATE_EXPRESSION     : {
       not_a_number        :   'expression is not a number'
                             },

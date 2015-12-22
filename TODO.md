@@ -25,7 +25,7 @@
 Lang name proposals:
 
 pong - simple game, simple language
-sparc - spark compiler
-yal - yet another language
-hake - [haki]
+sparck - spark compiler
+haki - nordic mythology + sounds similar to 'hacking'
+zinc - zinc is not c
 

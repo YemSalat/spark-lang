@@ -230,10 +230,12 @@ module.exports = (function() {
     },
 
     FOR_STATEMENT: function (node) {
+      symbolTable.enterScope();
       node.init = __evalNode(node.init);
       node.test = __evalNode(node.test);
       node.update = __evalNode(node.update);
       node.body = __evalNode(node.body);
+      symbolTable.exitScope();
 
       return node;
     },
@@ -304,13 +306,19 @@ module.exports = (function() {
       // check types
       var cType = util.typeCheck(node.left.type, node.right.type);
       if (!cType) {
-        return errorManager.logError(node, node.location, 'type_mismatch', [node.right.type, node.left.type]);
+        return errorManager.logError(node, node.left.location, 'type_mismatch', [node.right.type, node.left.type]);
       }
 
       return node;
     },
 
     ASSIGNMENT_ACTION: function (node) {
+      node.left = __evalNode(node.left);
+      node.right = __evalNode(node.right);
+      var cType = util.typeCheck(node.left.type, node.right.type);
+      if (!cType) {
+        return errorManager.logError(node, node.location, 'type_mismatch', [node.right.type, node.left.type]);
+      }
       return node;
     },
 
