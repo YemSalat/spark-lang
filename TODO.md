@@ -7,9 +7,25 @@
 - add string templates: `This is a { variable } embedded inside a string"`
 - add string limits: `str myString[3] = "Hello" // "Hel"`
 
-
-- add default parameters
+- add enums
 
 - *maybe:* add 'range' syntax: `myArray[0..5]`
 - *maybe:* add `when` operator
 - *maybe:* add short-hand functions
+
+- make `define` namespace separate from variable scopes (so one can't redefine language keywords and variables)
+
+**Add warnings for**
+- unused vars
+- unreachable code
+
+**DONE:**
+- add default parameters
+
+Lang name proposals:
+
+pong - simple game, simple language
+sparc - spark compiler
+yal - yet another language
+hake - [haki]
+
