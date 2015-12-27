@@ -31,20 +31,13 @@ module.exports = (function() {
         throw new SemanticError('SemanticError', pNode.error.message, pNode.error.location);
       }
     }
-    else {
-      console.log('Node evaluation method is not defined for:');
-      console.log(node);
-    }
 
     return pNode;
   };
 
   // :: API
   var api = {
-    parse: function (tree, opts) {
-      var options = {
-        partial: opts.partial || false
-      };
+    parse: function (tree, options) {
       // reset tables
       symbolTable.reset();
       funcTable.reset();
