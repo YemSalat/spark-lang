@@ -1,6 +1,10 @@
 module.exports = (function () {
+  'use strict';
+
+  // :: PRIVATE
   var uses = [];
 
+  // :: API
   var api = {
     add: function (func) {
       if (uses.indexOf(func) === -1) {
@@ -21,7 +25,7 @@ module.exports = (function () {
     reset: function () {
       uses = [];
     }
-  }
+  };
   
   // :: EXPORT
   return api;

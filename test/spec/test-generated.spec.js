@@ -2,7 +2,7 @@ var util = require('../modules/TestUtil');
 
 describe('Test code generated from files', function() {
 
-	describe('Test code generation comparison', function () {
+	describe('Test code generation comparison - simple #1', function () {
 		var cmpArray;
 		var chkResults = [];
 		var genResults = [];
@@ -25,6 +25,33 @@ describe('Test code generated from files', function() {
 			}
 		});
 	});
+
+	describe('Test code generation comparison - simple #2', function () {
+		var cmpArray;
+		var chkResults = [];
+		var genResults = [];
+		beforeEach(function (done) {
+			util.loadComparison( 'cmp-simple-2.sprk', function (cmpArray) {
+				cmpArray = cmpArray;
+				for (var i=0,l = cmpArray.length; i<l; i++) {
+					chkResults.push(cmpArray[i][1]);
+					genResults.push(util.getCode(cmpArray[i][0]));
+				}
+				done();
+			});
+			
+		});
+
+		it('Checks code comparison #2', function() {
+
+			for (var i=0,l = chkResults.length; i<l; i++) {
+				expect( genResults[i] ).toEqual( chkResults[i] );
+			}
+		});
+	});
+
+
+
 	describe('Test code generation for /var-declarations.sprk', function () {
 		var abstract, symbolScope, funcScope;
 		

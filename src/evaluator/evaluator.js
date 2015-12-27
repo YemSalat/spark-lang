@@ -2,11 +2,11 @@ module.exports = (function() {
   'use strict';
 
   // :: MODULES
-  var symbolTable = require('./modules/SymbolTable')
+  var symbolTable = require('./modules/SymbolTable');
   var funcTable = require('./modules/FuncTable');
   var errorManager = require('./modules/ErrorManager');
   var util = require('./modules/EvaluatorUtil');
-  
+
   // :: CONSTANTS
   var DEFAULT_CONSTANTS = require('./../common/constants').DEFAULT_CONSTANTS;
   var DEFAULT_FUNCTIONS = require('./../common/functions').DEFAULT_FUNCTIONS;
@@ -18,14 +18,14 @@ module.exports = (function() {
     this.location = location;
   }
 
-  // :: OP
+  // :: PRIVATE
   var __evalNode = function(node, method) {
     var mType = method ||
                 (node !== null) ? node['$$'] : null;
 
     var pNode = null;
     if (mType) {
-      pNode = evaluate[mType](node)
+      pNode = evaluate[mType](node);
       if (pNode.error) {
         console.log(JSON.stringify( pNode ));
         throw new SemanticError('SemanticError', pNode.error.message, pNode.error.location);
@@ -39,14 +39,18 @@ module.exports = (function() {
     return pNode;
   };
 
+  // :: API
   var api = {
-    parse: function (tree, options) {
+    parse: function (tree, opts) {
+      var options = {
+        partial: opts.partial || false
+      };
       // reset tables
-      symbolTable.reset(); 
+      symbolTable.reset();
       funcTable.reset();
 
       var _tree = __evalNode(tree);
-      
+
       return {
         tree: _tree,
         symbolScope: symbolTable.getTable(),
@@ -55,19 +59,19 @@ module.exports = (function() {
     }
   };
 
-  // :: EVALUATE
+  // :: EVALUATOR
   var evaluate = {
 
     DOCSTRING: function(node) {
       return node;
     },
-    
+
     VARIABLE_STATEMENT: function(node) {
       var varType = node.type;
 
       for (var i=0,l=node.declarations.length; i<l; i++) {
         var item = node.declarations[i];
-        
+
         // eval right side
         var initType = null;
         if (item.init !== null) {
@@ -93,7 +97,7 @@ module.exports = (function() {
         var variable = symbolTable.checkScope(varName);
         if (variable) {
           // error
-          return errorManager.logError(node, node.location, 'already_exists', [item.id.name, variable.value, variable.initLine]);
+          return errorManager.logError(node, item.id.location, 'already_exists', [item.id.name, variable.value, variable.initLine]);
         }
         else {
           // add new variable to current scope
@@ -114,7 +118,6 @@ module.exports = (function() {
     VARIABLE_DECLARATOR: function (node) {
       return node;
     },
-
 
     FUNCTION_DECLARATION: function (node) {
       var cName = node.id.name;
@@ -174,6 +177,7 @@ module.exports = (function() {
 
       return node;
     },
+    
     PARAM_DECLARATOR: function (node) {
       // check default value
       if (node.default) {
@@ -185,6 +189,7 @@ module.exports = (function() {
       }
       return node;
     },
+
     RETURN_STATEMENT: function (node) {
       node.argument = __evalNode(node.argument);
       // set return statement type
@@ -206,11 +211,12 @@ module.exports = (function() {
 
       return node;
     },
+
     CALL_STATEMENT: function (node) {
       var cName = node.callee.name;
-      // eval arguments
+      // eval arguments      
       for (var i=0, l=node.arguments.length; i<l; i++) {
-        var cArg = node.arguments[i] = __evalNode(node.arguments[i]);
+        node.arguments[i] = __evalNode(node.arguments[i]);
       }
       // dont eval built-in functions
       if (DEFAULT_FUNCTIONS.hasOwnProperty(cName)) {
@@ -243,13 +249,14 @@ module.exports = (function() {
 
       return node;
     },
+
     BREAK_STATEMENT: function (node) {
       return node;
     },
+
     CONTINUE_STATEMENT: function (node) {
       return node;
     },
-
 
     EXPRESSION_STATEMENT: function (node) {
       var newNode = __evalNode(node.expression);
@@ -336,16 +343,16 @@ module.exports = (function() {
 
       // decrease scope
       symbolTable.exitScope();
-      
+
       return node;
     },
 
     PROGRAM: function (node) {
-
+      // parse each program statement
       node.body.forEach(function(item) {
         item = __evalNode(item);
       });
-      
+
       return node;
     },
 
@@ -388,7 +395,7 @@ module.exports = (function() {
         // error
         return errorManager.logError(node, node.location, 'not_a_number');
       }
-      node.type = node.argument.type; 
+      node.type = node.argument.type;
       return node;
     },
 
@@ -405,7 +412,7 @@ module.exports = (function() {
 
   };
 
-  // :: SPARK EVALUATOR
+  // :: EXPORT
   global.SparkEvaluator = api;
   return api;
 

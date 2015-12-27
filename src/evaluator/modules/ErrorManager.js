@@ -1,5 +1,4 @@
 module.exports = (function () {
-  // :: ERROR MANAGER
   'use strict';
 
   var errorConvertMaps = {
@@ -75,6 +74,7 @@ module.exports = (function () {
                             }
   };
 
+
   // log error
   var logError = function(node, location, errorType, params) {
     var errorCategory = (typeof node === 'string') ? node : node['$$'];
@@ -82,14 +82,14 @@ module.exports = (function () {
     // 'parse' error message
     if (params) {
       for (var i=0,l=params.length; i<l; i++) {
-        var parameter = params[i];
+        var cParam = params[i];
         var paramRegexA = new RegExp('\\{[ ]*([a-z]+)[ ]*\\:[ ]*'+ i +'[ ]*\\}', 'gi');
         var paramRegexB = new RegExp('\\{[ ]*'+ i +'[ ]*\\}', 'gi');
         errorMessage = errorMessage.replace(paramRegexA, function (a, b) {
           var cMap = errorConvertMaps[b];
-          return cMap[params[i]];
+          return cMap[cParam];
         });
-        errorMessage = errorMessage.replace(paramRegexB, params[i]);
+        errorMessage = errorMessage.replace(paramRegexB, cParam);
       }
     }
 
@@ -99,15 +99,15 @@ module.exports = (function () {
         message: errorMessage,
         node: node
       }
-    }
+    };
 
     return err;
-  }
+  };
 
   // api
   var api = {
     logError: logError
-  }
+  };
 
 
   // :: EXPORT

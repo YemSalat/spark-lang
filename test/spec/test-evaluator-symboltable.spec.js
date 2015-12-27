@@ -1,7 +1,7 @@
 var util = require('../modules/TestUtil');
-var evaluatorUtil = require('../../src/evaluator/modules/EvaluatorUtil.js');
+var symbolTable = require('../../src/evaluator/modules/SymbolTable.js');
 
-describe('Test EvaluatorUtil', function() {
+describe('Test evaluator SymbolTable', function() {
 
 	describe('Test assignment declaration', function() {
 

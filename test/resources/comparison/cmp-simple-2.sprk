@@ -1,0 +1,116 @@
+
+a = 1
+for (a < 10) {
+  a++
+}
+
+if a < 10 { 
+  print( "Hello!" )
+}
+else if ( a > 0 ) {
+  foo = 23
+  print( foo )
+}
+
+int printSum(int x, int y = 1) {
+  return ( x + y ) *2
+}
+
+print( printSum(a, 3) )
+print( printSum(1) )
+
+
+% ----------- %
+
+Serial.begin( 9600 );
+
+char a = 1;
+for ( ; a < 10 ;  ) {
+  a++;
+}
+
+if ( a < 10 ) {
+  Serial.print( "Hello!" );
+}
+else if ( a > 0 ) {
+  char foo = 23;
+  Serial.print( foo );
+}
+
+int printSum ( int x, int y )  {
+  return x + y * 2;
+}
+
+Serial.print( printSum( a, 3 ) );
+Serial.print( printSum( 1, 1 ) );
+
+
+% ===================== %
+
+// default function parameters
+void spinMotor( int degrees = 10 ) {
+  print( degrees )
+}
+
+spinMotor( 5 )
+
+spinMotor()
+
+
+% ----------- %
+
+Serial.begin( 9600 );
+
+void spinMotor ( int degrees )  {
+  Serial.print( degrees );
+}
+
+spinMotor( 5 );
+spinMotor( 10 );
+
+% ===================== %
+
+a = 1
+b = -1000
+foo = true
+bar = 'Hello!'
+alarmTimer = 5m 30s
+
+% ----------- %
+
+char a = 1;
+int b = -1000;
+bool foo = true;
+char bar[] = "Hello!";
+long alarmTimer = 330000;
+
+% ===================== %
+
+a = 1
+
+if a < 42 {
+  print( 'Hello!' )
+}
+else if a > 0 {
+  print( 'World' )
+}
+else {
+  print( 'Foo!' )
+}
+
+% ----------- %
+
+Serial.begin( 9600 );
+
+char a = 1;
+if ( a < 42 ) {
+  Serial.print( "Hello!" );
+}
+else if ( a > 0 ) {
+  Serial.print( "World" );
+}
+else {
+  Serial.print( "Foo!" );
+}
+
+% ===================== %

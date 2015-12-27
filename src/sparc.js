@@ -7,9 +7,11 @@ var SparkParser = require('./parser/parser.js');
 var SparkEvaluator = require('./evaluator/evaluator.js');
 var SparkGenerator = require('./generator/generator.js');
 
-var fInput = argv['_'][0] || null;
-var fOutput = argv['o'] || null;
-var iSource = argv['i'] || null;
+var options = {
+	fInput: argv['_'][0] || null,
+	fOutput: argv['o'] || null,
+	iSource: argv['i'] || null
+};
 
 var logError = function (error) {
 	var result = 'Unknown error';
@@ -32,35 +34,34 @@ var logError = function (error) {
 };
 
 var loadSource = function (callback) {
-	if (fInput) {
-		fs.readFile(fInput, 'utf8', function (err, data) {
+	if (options.fInput) {
+		fs.readFile(options.fInput, 'utf8', function (err, data) {
 			if(err) {
 				return console.log(err);
 			}
-			callback(resultCode);
+			callback(data);
 		});
 	}
-	else if (iSource) {
-		callback(iSource);
+	else if (options.iSource) {
+		callback(options.iSource);
 	}
 	else {
 		console.log('Source not specified');
 		process.exit(1);
 	}
-}
+};
 
 var processSource = function (source, callback) {
+	var syntaxTree, abstractTree;
 	try {
-		var syntaxTree = SparkParser.parse(source);
-	}
-	catch (e) {
+		syntaxTree = SparkParser.parse(source);
+	} catch (e) {
 		logError(e);
 	}
 	
 	try {
-		var abstractTree = SparkEvaluator.parse(syntaxTree).tree;
-	}
-	catch (e) {
+		abstractTree = SparkEvaluator.parse(syntaxTree).tree;
+	} catch (e) {
 		logError(e);
 	}
 	var resultCode = SparkGenerator.parse(abstractTree);
@@ -69,25 +70,25 @@ var processSource = function (source, callback) {
 };
 
 var outputGeneratedCode = function (code) {
-	if (fOutput) {
-		fs.writeFile(fOutput, code, function(err) {
+	if (options.fOutput) {
+		fs.writeFile(options.fOutput, code, function(err) {
 			if(err) {
 				return console.log(err);
 			}
-			console.log('Output saved to: ' + fOutput);
+			console.log('Output saved to: ' + options.fOutput);
 		});
 	}
 	else {
 		console.log(code);
 	}
-}
+};
 
 var api = {
 	parse: function () {
 		loadSource(function (source) {
-			processSource(source, outputGeneratedCode)
+			processSource(source, outputGeneratedCode);
 		});
 	}
-}
+};
 
 api.parse();

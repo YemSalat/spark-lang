@@ -9,19 +9,30 @@ module.exports = (function() {
   // :: CONSTANTS
   var DEFAULT_FUNCTIONS = require('./../common/functions').DEFAULT_FUNCTIONS;
 
-  // :: OP
+  // :: ERRORS
+  function GeneratorError (name, message, location) {
+    this.name = name;
+    this.message = message;
+    this.location = location;
+  }
+
+  // :: PRIVATE
+  // generate c++ code for parse tree node
   var __generateNode = function (node, method) {
     if (node === null) {
       return '';
     }
     var mType = method || node['$$'];
-    var pNode = evaluate[mType](node)
+    var pNode = evaluate[mType](node);
     if (pNode.error) {
-      throw new CompilerError('SemanticError', pNode.error.message, pNode.error.location);
+      throw new GeneratorError('SemanticError', pNode.error.message, pNode.error.location);
     }
     return pNode;
   };
 
+
+
+  // pre-process output
   var __preProcess = function (code) {
     var result = '';
     // @TODO: Refactor
@@ -34,12 +45,12 @@ module.exports = (function() {
     return result;
   };
 
+  // post-process output
   var __postProcess = function (code) {
     var result = code.trim().replace(/([a-z0-9])[ ]+/gi, '$1 ');
     return result;
   };
 
-  // :: VARS
 
   // :: API
   var api = {
@@ -95,9 +106,8 @@ module.exports = (function() {
       return node;
     },
 
-
     FUNCTION_DECLARATION: function (node) {
-      var result = ''
+      var result = '';
       if (node.doc) {
         result += __generateNode(node.doc);
       }
@@ -112,21 +122,24 @@ module.exports = (function() {
 
       result += fnParams.join(', ');
 
-      result += ' ) '
+      result += ' ) ';
 
       // parse function body
       result += __generateNode(node.body);
       
       return result;
     },
+
     PARAM_DECLARATOR: function (node) {
       var result = util.generateVarDeclaration(node);
       return result;
     },
+
     RETURN_STATEMENT: function (node) {
       var result = 'return ' + __generateNode(node.argument);
       return result;
     },
+
     CALL_STATEMENT: function (node) {
       var fName = node.callee.name;
       var result = fName;
@@ -152,7 +165,6 @@ module.exports = (function() {
       return result;
     },
 
-
     FOR_STATEMENT: function (node) {
       var result = 'for (';
       result += __generateNode(node.init) + ' ; ';
@@ -165,10 +177,10 @@ module.exports = (function() {
     BREAK_STATEMENT: function (node) {
       return node;
     },
+
     CONTINUE_STATEMENT: function (node) {
       return node;
     },
-
 
     EXPRESSION_STATEMENT: function (node) {
       var result = __generateNode(node.expression);
@@ -250,9 +262,7 @@ module.exports = (function() {
       var result = 'if ( ';
 
       result += __generateNode(node.test);
-
       result += ' )';
-      
       result += __generateNode(node.consequent);
 
       if (node.alternate) {

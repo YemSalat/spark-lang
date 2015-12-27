@@ -9,9 +9,9 @@ module.exports = (function () {
       pinWrite: 'digitalWrite',
       pinMode: 'pinMode',
       print: 'Serial.print',
-      printn: 'Serial.println'
+      println: 'Serial.println'
     }
-  }
+  };
 
   return api;
 

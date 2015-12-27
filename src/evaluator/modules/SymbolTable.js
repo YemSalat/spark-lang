@@ -1,9 +1,10 @@
 module.exports = (function () {
-  // :: SYMBOL TABLE
   'use strict';
 
+  // :: MODULES
   var initialScope = require('../../common/constants').DEFAULT_CONSTANTS;
 
+  // :: PRIVATE
   var scopePointer = 1;
   var table = {
     sc0: initialScope,
@@ -11,6 +12,7 @@ module.exports = (function () {
   };
   var currentScope = table['sc' + scopePointer];
 
+  // :: API
   var api = {
 
     setInitialScope: function (scope) {
@@ -46,7 +48,7 @@ module.exports = (function () {
     },
 
     getScope: function (num) {
-      var scNum = (typeof num !== 'udefined') ? num : scopePointer;
+      var scNum = (typeof num !== 'undefined') ? num : scopePointer;
       return table['sc' + scNum];
     },
 
@@ -82,7 +84,7 @@ module.exports = (function () {
         return false;
       }
     }  
-  }
+  };
 
   // :: EXPORT
   return api;

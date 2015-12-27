@@ -1,7 +1,7 @@
 module.exports = (function () {
-  // :: UTIL
   'use strict';
 
+  // :: PRIVATE
   var typeMap = {
     'byte'  : 'char',
     'ubyte' : 'unsigned char',
@@ -13,14 +13,14 @@ module.exports = (function () {
     'str'   : 'char',
     'void'  : 'void',
   };
-
   var typeDescriptors = {
     'str' : {
       isArray: true,
       isString: true
     }
-  }
+  };
 
+  // :: API
   var api = {
     generateType: function (type) {
       return typeMap[type] || type;

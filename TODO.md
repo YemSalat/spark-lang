@@ -9,11 +9,15 @@
 
 - add enums
 
+- no need for 'break' in switch-case
+
 - *maybe:* add 'range' syntax: `myArray[0..5]`
 - *maybe:* add `when` operator
 - *maybe:* add short-hand functions
+- *maybe:* pass all non-priitive types to functions as `const &`
 
 - make `define` namespace separate from variable scopes (so one can't redefine language keywords and variables)
+- inlude header guards by default
 
 **Add warnings for**
 - unused vars
@@ -21,11 +25,3 @@
 
 **DONE:**
 - add default parameters
-
-Lang name proposals:
-
-pong - simple game, simple language
-sparck - spark compiler
-haki - nordic mythology + sounds similar to 'hacking'
-zinc - zinc is not c
-

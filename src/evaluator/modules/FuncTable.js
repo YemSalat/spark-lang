@@ -1,7 +1,7 @@
 module.exports = (function () {
-  // :: FUNCTION TABLE
   'use strict';
 
+  // :: PRIVATE
   var table = {};
   var currentFunc = {
     node: null,
@@ -12,8 +12,9 @@ module.exports = (function () {
   var numberTypes = ['byte', 'int', 'long', 'float'];
   var isNumber = function (type) {
     return numberTypes.indexOf(type) > -1;
-  }
+  };
   
+  // :: API
   var api = {
     getTable: function () {
       return table;
@@ -121,7 +122,7 @@ module.exports = (function () {
       var type = node.type;
       var params = api.getParams(node.params);
       var initLine = node.location.start.line;
-      var doc = (node.doc) ? node.doc.body : "";
+      var doc = (node.doc) ? node.doc.body : '';
 
       if (! table[name] ) {
         table[name] = [];
@@ -140,7 +141,8 @@ module.exports = (function () {
 
       return func;
     }
-  }
+  };
+
   // :: EXPORT
   return api;
 

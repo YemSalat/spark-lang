@@ -1,6 +1,7 @@
 module.exports = (function () {
-  // :: UTILS
   'use strict';
+
+  // :: PRIVATE
   var numberTypeScale = ['byte', 'int', 'long', 'float'];
   var equalityOperatorMap = ['==', '!=', 'is', 'is not'];
   var signedIntegerLimits = {
@@ -9,6 +10,8 @@ module.exports = (function () {
     'long': 2147483647
   };
   
+
+  // :: API
   var api = {
     constructVarDeclarator: function (node) {
       node['$$'] = 'VARIABLE_STATEMENT';
@@ -28,6 +31,7 @@ module.exports = (function () {
 
       return node;
     },
+
     typeCheck: function (leftType, rightType, strict) {
       if (strict) {
         return leftType === rightType;
@@ -57,9 +61,7 @@ module.exports = (function () {
 
       return false;
     },
-    getParameters: function (paramArray) {
 
-    },
     checkParamDuplicates: function (params) {
       for (var i=1,l=params.length; i<l; i++) {
         var curPram = params[i];
@@ -72,9 +74,11 @@ module.exports = (function () {
       }
       return false;
     },
+
     isNumber: function (type) {
       return numberTypeScale.indexOf(type) > -1;
     },
+
     compareNumberTypes: function (typeA, typeB) {
       var nA = numberTypeScale.indexOf(typeA);
       var nB = numberTypeScale.indexOf(typeB);
@@ -85,9 +89,11 @@ module.exports = (function () {
         return -Infinity; // something went wrong, check nA/nB
       }
     },
+
     isEqualityOperator: function (operator) {
       return equalityOperatorMap.indexOf(operator) > -1;
     },
+
     getIntegerType: function (number) {
       var nmb = parseInt(number, 10);
       var a_nmb = Math.abs(nmb);
@@ -108,6 +114,7 @@ module.exports = (function () {
       return resType;
     }
   };
+
   // :: EXPORT
   return api;
 

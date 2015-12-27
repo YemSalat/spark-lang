@@ -1,7 +1,11 @@
 ##Test code generated from files
 
-**Test code generation comparison**
-- Checks code comparison #1 - *74ms* 
+**Test code generation comparison - simple #1**
+- Checks code comparison #1 - *76ms* 
+
+
+**Test code generated from files.Test code generation comparison - simple #2**
+- Checks code comparison #1 - *27ms* 
 
 
 **Test code generated from files.Test code generation for /var-declarations.sprk**
@@ -10,6 +14,6 @@
 
 
 **Test code generated from files.Compare output for /var-declarations/or/-alt.sprk**
-- Checks if implicit and explicit scopes are identical - *15ms* 
+- Checks if implicit and explicit scopes are identical - *39ms* 
 
 
